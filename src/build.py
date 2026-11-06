@@ -45,7 +45,7 @@ sub('''  function renderScan() {''', '''  function normName(s) { return String(s
       match: r.match && ids.has(String(r.match)) ? String(r.match) : (byName[normName(r.name)] || ""),
     }));
     if (!scanLines.length) { scanStatus("No products found in that text. Copy the whole block Claude sent, including the curly brackets."); return; }
-    if (!$("#scanSup").value.trim() && scanSupplier) {
+    if (scanSupplier) {
       const known = suppliers().find((s) => s.toLowerCase() === scanSupplier.toLowerCase());
       $("#scanSup").value = known || scanSupplier;
     }

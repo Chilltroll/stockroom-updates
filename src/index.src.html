@@ -427,7 +427,7 @@ textarea.bulk { min-height: 150px; font-family: var(--font-num); font-size: 0.85
           <div class="field"><label for="a-supplier">Supplier / wholesaler</label><input id="a-supplier" list="supplierList" placeholder="Who you order from"></div>
           <div class="field"><label for="a-type">Product type</label><input id="a-type" list="typeList" autocomplete="off" placeholder="Pick or type a new one"></div>
           <div class="field"><label for="a-on">On shelf now</label><input id="a-on" type="number" inputmode="numeric" min="0" value="0"></div>
-          <div class="field"><label for="a-min">Minimum</label><input id="a-min" type="number" inputmode="numeric" min="0" value="2"><span class="hint">Flag for ordering at or below this</span></div>
+          <div class="field"><label for="a-min">Minimum</label><input id="a-min" type="number" inputmode="numeric" min="0" value="0"><span class="hint">Flag for ordering at or below this</span></div>
           <div class="field"><label for="a-rq">Usual order qty</label><input id="a-rq" type="number" inputmode="numeric" min="0" placeholder="Auto"><span class="hint">Leave blank to top up to twice the minimum</span></div>
           <div class="field"><label for="a-price">Selling price (€)</label><input id="a-price" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"></div>
           <div class="field"><label for="a-exp">Expiry date</label><input id="a-exp" type="date"><span class="hint">For the units above. Add more batches later under Edit.</span></div>
@@ -1748,7 +1748,7 @@ textarea.bulk { min-height: 150px; font-family: var(--font-num); font-size: 0.85
     else if (f === "match") { scanLines[i].match = t.value; renderScan(); }
   });
   $("#scanReview").addEventListener("click", async (e) => {
-    if (e.target.id === "scanClear") { scanLines = []; $("#scanReview").innerHTML = ""; scanStatus(""); return; }
+    if (e.target.id === "scanClear") { scanLines = []; $("#scanReview").innerHTML = ""; scanStatus(""); $("#scanSup").value = ""; scanSupplier = ""; return; }
     if (e.target.id !== "scanSave") return;
     if (!db) { toast("Open this page on claude.ai while signed in to save items."); return; }
     const btn = e.target; btn.disabled = true;
@@ -1767,13 +1767,14 @@ textarea.bulk { min-height: 150px; font-family: var(--font-num); font-size: 0.85
           if (Object.keys(patch).length) await update(it.id, patch);
           updated++;
         } else {
-          await db.collection("items").add(itemFrom({ name: l.name, supplier: sup, type: l.type, onHand: l.qty, min: 2, price: l.price, expiry: l.expiry, ingredients: l.ingredients || "" }));
+          await db.collection("items").add(itemFrom({ name: l.name, supplier: sup, type: l.type, onHand: l.qty, min: 0, price: l.price, expiry: l.expiry, ingredients: l.ingredients || "" }));
           added++;
         }
       } catch (err) { writeErr(err); break; }
       btn.textContent = `Saving… ${added + updated}`;
     }
     scanLines = []; $("#scanReview").innerHTML = ""; scanFile.value = ""; setScanImages([]);
+    $("#scanSup").value = ""; scanSupplier = ""; btn.disabled = false; btn.textContent = "Add to stock";
     const parts = [added ? `${added} new item${added === 1 ? "" : "s"} added` : "", updated ? `${updated} item${updated === 1 ? "" : "s"} topped up` : "", repriced ? `${repriced} price${repriced === 1 ? "" : "s"} updated` : ""].filter(Boolean);
     scanStatus(parts.length ? parts.join(", ") + "." : "");
     if (parts.length) toast(parts.join(", "));

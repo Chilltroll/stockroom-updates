@@ -11,7 +11,7 @@ import { exec, spawn, spawnSync } from "node:child_process";
 import PAGE from "./index.html" with { type: "text" };
 import { ICON_192, ICON_512, ICON_180, ICON_ICO } from "./assets.js";
 
-const VERSION = "1.7.0";
+const VERSION = "1.7.1";
 const IS_COMPILED = !!process.execPath && !/bun(\.exe)?$/i.test(path.basename(process.execPath));
 const BASE_DIR = process.env.STOCKROOM_DIR || (IS_COMPILED ? path.dirname(process.execPath) : process.cwd());
 const DATA_DIR = path.join(BASE_DIR, "data");

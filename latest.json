@@ -1,5 +1,5 @@
 {
- "version": "1.7.0",
- "sha256": "af278f634365e6339f7d244cfab5ec2e9ed8e8c900abac619c1a2f12ea29d8f3",
- "notes": "New Herba Pharmacy logos, and a new Settings tab for backups, phones, product types and suppliers"
+ "version": "1.7.1",
+ "sha256": "bfe999c453c7857170124536f014dd05936c99aad74b6d01405eb87ee5e2b456",
+ "notes": "New products now start with a minimum of 0, and the supplier box empties after you add an invoice"
 }

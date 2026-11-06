@@ -11,7 +11,7 @@ import { exec, spawn, spawnSync } from "node:child_process";
 import PAGE from "./index.html" with { type: "text" };
 import { ICON_192, ICON_512, ICON_180, ICON_ICO } from "./assets.js";
 
-const VERSION = "1.7.1";
+const VERSION = "1.7.2";
 const IS_COMPILED = !!process.execPath && !/bun(\.exe)?$/i.test(path.basename(process.execPath));
 const BASE_DIR = process.env.STOCKROOM_DIR || (IS_COMPILED ? path.dirname(process.execPath) : process.cwd());
 const DATA_DIR = path.join(BASE_DIR, "data");
@@ -90,6 +90,24 @@ function load() {
     fs.copyFileSync(DATA_FILE, bad);
     showError("Stock Room couldn't read its data file, so it didn't start.\n\nA copy of the file was kept at:\n" + bad + "\n\nYou can put back a copy from the data\\backups folder. Send Claude a photo of this message if you need help.");
     process.exit(1);
+  }
+}
+// Changes to existing data that the pharmacy asked for, each applied once.
+function oneTimeChanges() {
+  const f = path.join(DATA_DIR, "applied-changes.json");
+  let done = [];
+  try { done = JSON.parse(fs.readFileSync(f, "utf8")); if (!Array.isArray(done)) done = []; } catch (e) {}
+  let changed = false;
+  if (!done.includes("min-zero-2026-11-06")) {
+    let n = 0;
+    for (const it of Object.values(db.items)) { if (it && typeof it === "object" && Number(it.min) !== 0) { it.min = 0; n++; } }
+    done.push("min-zero-2026-11-06"); changed = true;
+    logLine("Set the minimum to 0 on " + n + " existing products.");
+  }
+  if (changed) {
+    try { fs.copyFileSync(DATA_FILE, path.join(BACKUP_DIR, `before-changes-${Date.now()}.json`)); } catch (e) {}
+    saveNow();
+    try { fs.writeFileSync(f, JSON.stringify(done)); } catch (e) {}
   }
 }
 function saveNow() {
@@ -381,6 +399,7 @@ if (await alreadyRunning(START_PORT)) {
   setTimeout(() => process.exit(3), 1500);
 } else {
   load();
+  oneTimeChanges();
   start(START_PORT, 10);
 }
 for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) process.on(sig, () => { if (loaded) { try { saveNow(); } catch (e) {} } process.exit(0); });

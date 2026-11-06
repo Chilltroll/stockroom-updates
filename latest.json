@@ -1,5 +1,5 @@
 {
- "version": "1.7.1",
- "sha256": "bfe999c453c7857170124536f014dd05936c99aad74b6d01405eb87ee5e2b456",
- "notes": "New products now start with a minimum of 0, and the supplier box empties after you add an invoice"
+ "version": "1.7.2",
+ "sha256": "df7affc56d24c30bf03fae6067a7b4a1e1cdbb026c622b4b2a8b20884f4e9170",
+ "notes": "All existing products now have a minimum of 0"
 }

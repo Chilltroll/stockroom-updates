@@ -1,5 +1,5 @@
 {
- "version": "1.6.0",
- "sha256": "6e2c49784a1a8a883b11b69efe314b89b14402cb578fabe5d7fc2377eb36d9ca",
- "notes": "Automatic updates added"
+ "version": "1.7.0",
+ "sha256": "af278f634365e6339f7d244cfab5ec2e9ed8e8c900abac619c1a2f12ea29d8f3",
+ "notes": "New Herba Pharmacy logos, and a new Settings tab for backups, phones, product types and suppliers"
 }

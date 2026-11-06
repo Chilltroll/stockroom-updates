@@ -75,8 +75,8 @@ sub('"Open this page on claude.ai while signed in to see and update the shared s
 sub('''const NO_SCAN = "Invoice reading isn't available in this view. Open Stock Room at claude.ai in Chrome, Safari or Edge while signed in. If it still doesn't work, send the invoice photo to Claude in chat and it will add the items for you.";''',
     '''const NO_SCAN = "Send the invoice photo to Claude in chat and paste the reply above.";''')
 
-# D. phones + backup card at the end of Add items
-sub('''      <datalist id="supplierList"></datalist>''', '''      <div class="card" id="devCard">
+# D. phones + backup card in Settings
+sub('''      <div class="card" id="bkCard">''', '''      <div class="card" id="devCard">
         <h2>Phones and backups</h2>
         <p>Phones on the pharmacy Wi-Fi open Stock Room at this address. Add it to the home screen to use it like an app.</p>
         <div id="devAddr" class="addr">Looking up address…</div>
@@ -100,7 +100,7 @@ sub('''      <datalist id="supplierList"></datalist>''', '''      <div class="ca
           <div id="quitBox"></div>
         </div>
       </div>
-      <datalist id="supplierList"></datalist>''')
+      <div class="card" id="bkCard">''')
 
 # E. full document, head extras, shim before the app script
 extra_css = '''
@@ -207,7 +207,8 @@ head = '''<!doctype html>
 <meta name="apple-mobile-web-app-title" content="Stock Room">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="icon" href="/icon-192.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 '''
 # move <title>, font links and <style> into the head

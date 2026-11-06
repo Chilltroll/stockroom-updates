@@ -36,7 +36,7 @@ Keep all of these together in the same folder.
      background, so phones keep working even when you close the Stock Room window.
      (When you click the desktop icon, a small window may flash on the taskbar for
      a second. That's normal.)
-   - To stop Stock Room completely: Add items > Phones and backups > Stop Stock Room.
+   - To stop Stock Room completely: Settings > Phones and backups > Stop Stock Room.
      This button only appears on the pharmacy computer, not on phones.
      It also stops by itself when the computer is shut down.
    - Closed the Stock Room window by mistake? Double-click the desktop icon again.
@@ -49,7 +49,7 @@ Keep all of these together in the same folder.
 3. OPEN IT ON PHONES
    - Connect the phone to the pharmacy Wi-Fi.
    - Open Safari (iPhone) or Chrome (Android) and type the address shown in the
-     Stock Room on the computer under Add items > Phones and backups,
+     Stock Room on the computer under Settings > Phones and backups,
      for example  http://192.168.1.20:8080
    - Make it an app icon:
        iPhone:  Share button > Add to Home Screen
@@ -73,14 +73,14 @@ Keep all of these together in the same folder.
 
    Tip: the phone address can change if the router gives the computer a new
    number. If phones stop connecting, check the address in Stock Room under
-   Add items > Phones and backups.
+   Settings > Phones and backups.
    Whoever looks after your router can "reserve" the computer's address so it
    never changes.
 
 
 5. AUTOMATIC UPDATES
    - Stock Room updates itself from the pharmacy's GitHub page. Turn it on once:
-     Add items > Phones and backups > Automatic updates > type the pharmacy's
+     Settings > Phones and backups > Automatic updates > type the pharmacy's
      GitHub username > Save.
    - It checks for a new version every 3 hours (the computer needs internet).
    - A new version installs by itself once nobody has used Stock Room for
@@ -100,9 +100,9 @@ Keep all of these together in the same folder.
 
 7. BACKUPS
    - A copy is saved automatically every day in data\backups (the last 60 days are kept).
-   - Add items > Phones and backups > "Download backup" saves a copy anywhere you like,
+   - Settings > Phones and backups > "Download backup" saves a copy anywhere you like,
      e.g. a USB stick. Do this weekly.
-   - To restore: Add items > Phones and backups > "Restore from backup" and pick the file.
+   - To restore: Settings > Phones and backups > "Restore from backup" and pick the file.
      The current data is kept in data\backups before it's replaced.
    - Moving to a new computer: copy the whole StockRoom folder across.
 

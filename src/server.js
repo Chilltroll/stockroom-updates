@@ -9,9 +9,9 @@ import crypto from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { exec, spawn, spawnSync } from "node:child_process";
 import PAGE from "./index.html" with { type: "text" };
-import { ICON_192, ICON_512, ICON_180 } from "./assets.js";
+import { ICON_192, ICON_512, ICON_180, ICON_ICO } from "./assets.js";
 
-const VERSION = "1.6.0";
+const VERSION = "1.7.0";
 const IS_COMPILED = !!process.execPath && !/bun(\.exe)?$/i.test(path.basename(process.execPath));
 const BASE_DIR = process.env.STOCKROOM_DIR || (IS_COMPILED ? path.dirname(process.execPath) : process.cwd());
 const DATA_DIR = path.join(BASE_DIR, "data");
@@ -166,6 +166,7 @@ const server = http.createServer(async (req, res) => {
   try {
     if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) return send(res, 200, PAGE, "text/html; charset=utf-8");
     if (url.pathname === "/manifest.webmanifest") return send(res, 200, MANIFEST, "application/manifest+json");
+    if (url.pathname === "/favicon.ico") return send(res, 200, Buffer.from(ICON_ICO, "base64"), "image/x-icon", { "Cache-Control": "max-age=86400" });
     if (url.pathname === "/icon-192.png") return send(res, 200, Buffer.from(ICON_192, "base64"), "image/png", { "Cache-Control": "max-age=86400" });
     if (url.pathname === "/icon-512.png") return send(res, 200, Buffer.from(ICON_512, "base64"), "image/png", { "Cache-Control": "max-age=86400" });
     if (url.pathname === "/apple-touch-icon.png") return send(res, 200, Buffer.from(ICON_180, "base64"), "image/png", { "Cache-Control": "max-age=86400" });
@@ -307,6 +308,16 @@ function startUpdater() {
   setInterval(() => { if (upd.ready && Date.now() - lastWrite > QUIET_MS) restartForUpdate("Stock Room was quiet."); }, 60 * 1000);
 }
 
+// Keep the desktop icon file up to date, so a new logo arrives with automatic updates.
+function refreshIconFile() {
+  try {
+    const f = path.join(BASE_DIR, "stockroom.ico"), want = Buffer.from(ICON_ICO, "base64");
+    if (fs.existsSync(f) && fs.readFileSync(f).equals(want)) return;
+    fs.writeFileSync(f, want);
+    if (process.platform === "win32") exec("ie4uinit.exe -show", { windowsHide: true }, () => {});
+  } catch (e) {}
+}
+
 function start(port, triesLeft) {
   server.once("error", (e) => {
     if (e.code === "EADDRINUSE" && triesLeft > 0) return start(port + 1, triesLeft - 1);
@@ -324,10 +335,11 @@ function start(port, triesLeft) {
     console.log("\n   Data file:  " + DATA_FILE);
     console.log("   Backups:    " + BACKUP_DIR + "  (one per day)");
     console.log("\n   Stock Room is running. Closing the Stock Room window doesn't stop it,");
-    console.log("   so phones keep working. To stop it: Add items > Phones and backups > Stop.\n");
+    console.log("   so phones keep working. To stop it: Settings > Phones and backups > Stop.\n");
     logLine("Started v" + VERSION + " on port " + port + (lan.length ? " (phones: " + lan.join(", ") + ")" : " (no network)"));
     openWindow(port);
     startUpdater();
+    refreshIconFile();
   });
 }
 

@@ -1,0 +1,114 @@
+HERBA PHARMACY - STOCK ROOM
+How to set it up on the pharmacy computer and phones
+====================================================
+
+WHAT'S IN THIS FOLDER
+  Start Stock Room.bat   Double-click this the first time. It also puts a
+                         "Stock Room" icon on your desktop for every day after.
+  stockroom.ico          The Stock Room icon.
+  stockroom-server.js    The Stock Room program (started by the file above).
+  Troubleshoot Stock Room.bat   Only if something goes wrong (see step 2).
+  data\                  Your stock, sales and settings (already copied from the
+                         Claude version), plus a daily backup in data\backups.
+  runtime\               Created on first start: the engine that runs Stock Room.
+  This guide.
+
+Keep all of these together in the same folder.
+
+
+1. PUT THE FOLDER ON THE PHARMACY COMPUTER
+   - Copy the whole StockRoom folder to C:\StockRoom (or your Documents folder).
+   - Do NOT put it in "Program Files": Windows won't let it save there.
+
+
+2. START IT
+   - Double-click "Start Stock Room".
+   - The first time, Windows may say "Windows protected your PC".
+     Click "More info", then "Run anyway". (This appears because the file
+     came from the internet. It only happens once.)
+   - The first start downloads the engine (about 40 MB, needs internet, takes
+     a minute). After that, Stock Room starts straight away and needs no internet.
+   - Windows Firewall will ask whether to allow it on networks.
+     Tick "Private networks" and click "Allow". Without this, phones can't connect.
+   - Stock Room opens in its own window, like a normal program.
+     A "Stock Room" icon is added to your desktop: use that from now on.
+   - From version 1.5 there is no black window. Stock Room runs quietly in the
+     background, so phones keep working even when you close the Stock Room window.
+     (When you click the desktop icon, a small window may flash on the taskbar for
+     a second. That's normal.)
+   - To stop Stock Room completely: Add items > Phones and backups > Stop Stock Room.
+     This button only appears on the pharmacy computer, not on phones.
+     It also stops by itself when the computer is shut down.
+   - Closed the Stock Room window by mistake? Double-click the desktop icon again.
+   - If Stock Room ever doesn't open, double-click "Troubleshoot Stock Room" in the
+     StockRoom folder. It starts Stock Room with the black window showing, so you
+     can see (and photograph) any message. The file data\stockroom.log also notes
+     each start, stop and problem.
+
+
+3. OPEN IT ON PHONES
+   - Connect the phone to the pharmacy Wi-Fi.
+   - Open Safari (iPhone) or Chrome (Android) and type the address shown in the
+     Stock Room on the computer under Add items > Phones and backups,
+     for example  http://192.168.1.20:8080
+   - Make it an app icon:
+       iPhone:  Share button > Add to Home Screen
+       Android: menu (three dots) > Add to Home screen / Install app
+   - Each person types their name the first time, so sales and counts show who did them.
+
+   If phones can't connect:
+   - Check the phone is on the pharmacy Wi-Fi, not mobile data.
+   - On the computer: Settings > Network & internet > Wi-Fi (or Ethernet) >
+     your network > set "Network profile type" to "Private".
+   - Make sure you clicked "Allow" for the firewall. If you missed it:
+     Start > "Allow an app through Windows Firewall" > find "bun" > tick Private.
+     (The firewall window may call the program "bun": that's Stock Room's engine.)
+
+
+4. START IT AUTOMATICALLY EACH MORNING (recommended)
+   - Press Windows key + R, type  shell:startup  and press Enter.
+   - Copy the "Stock Room" desktop icon into the folder that opens
+     (right-click the icon > Copy, then right-click in the folder > Paste).
+   Stock Room will now start whenever the computer is switched on.
+
+   Tip: the phone address can change if the router gives the computer a new
+   number. If phones stop connecting, check the address in Stock Room under
+   Add items > Phones and backups.
+   Whoever looks after your router can "reserve" the computer's address so it
+   never changes.
+
+
+5. AUTOMATIC UPDATES
+   - Stock Room updates itself from the pharmacy's GitHub page. Turn it on once:
+     Add items > Phones and backups > Automatic updates > type the pharmacy's
+     GitHub username > Save.
+   - It checks for a new version every 3 hours (the computer needs internet).
+   - A new version installs by itself once nobody has used Stock Room for
+     10 minutes, so it never interrupts a sale. You can also tap "Install now".
+     It takes a few seconds and no stock or sales are lost.
+   - Phones show a green bar "Stock Room has been updated". Tap it to refresh.
+   - Updates are kept in runtime\updates. If an update ever fails to start,
+     Stock Room goes back to the previous version by itself.
+
+
+6. INVOICES
+   - Send a photo of the invoice to Claude in your chat.
+   - Claude replies with a block of text. Copy it.
+   - In Stock Room: Add items > "Add an invoice from Claude" > paste > Load items.
+   - Check the lines (existing products are matched and topped up), then tap Add to stock.
+
+
+7. BACKUPS
+   - A copy is saved automatically every day in data\backups (the last 60 days are kept).
+   - Add items > Phones and backups > "Download backup" saves a copy anywhere you like,
+     e.g. a USB stick. Do this weekly.
+   - To restore: Add items > Phones and backups > "Restore from backup" and pick the file.
+     The current data is kept in data\backups before it's replaced.
+   - Moving to a new computer: copy the whole StockRoom folder across.
+
+
+IMPORTANT
+   - Stock Room only works while this computer is on and Stock Room is running.
+   - It works inside the pharmacy only (same Wi-Fi), not from home.
+   - The Cashout tab tracks stock. It does not issue fiscal receipts and does not
+     replace your registered till/POS for VAT.

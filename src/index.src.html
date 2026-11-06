@@ -1,0 +1,1894 @@
+<title>Herba Pharmacy Stock Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: Herba Pharmacy look — cream ground, deep forest green type and pills, leaf-green highlights, green footer band. */
+:root {
+  --bg: #f5f6ef;
+  --surface: #ffffff;
+  --sunk: #ecf1e4;
+  --fg: #1c3b24;
+  --muted: #5c6f60;
+  --line: #d9e2cf;
+  --accent: #2a6334;
+  --leaf: #7cb342;
+  --accent-ink: #ffffff;
+  --ok: #2a6334; --ok-bg: #e3f0d6;
+  --warn: #9a5400; --warn-bg: #fff0d6;
+  --bad: #b42318; --bad-bg: #fde6e3;
+  --info: #1d5aa3; --info-bg: #e2edfb;
+  --font-display: "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Nunito Sans", "Segoe UI", system-ui, sans-serif;
+  --font-num: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1911; --surface: #16241a; --sunk: #1c2e20; --fg: #e5efe0; --muted: #9db2a0; --line: #2a3f2e;
+    --accent: #8fcf5e; --leaf: #8fcf5e; --accent-ink: #0f1911;
+    --ok: #8fcf5e; --ok-bg: #1a3020; --warn: #f2b65c; --warn-bg: #33240c;
+    --bad: #ff8d82; --bad-bg: #3b1613; --info: #8db9f2; --info-bg: #13243a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1911; --surface: #16241a; --sunk: #1c2e20; --fg: #e5efe0; --muted: #9db2a0; --line: #2a3f2e;
+  --accent: #8fcf5e; --leaf: #8fcf5e; --accent-ink: #0f1911;
+  --ok: #8fcf5e; --ok-bg: #1a3020; --warn: #f2b65c; --warn-bg: #33240c;
+  --bad: #ff8d82; --bad-bg: #3b1613; --info: #8db9f2; --info-bg: #13243a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.45; }
+.app { max-width: 920px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 64px; display: grid; gap: 18px; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.top { position: relative; overflow: hidden; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 22px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between; }
+.top::after { content: ""; position: absolute; right: -40px; top: -50px; width: 190px; height: 190px; border-radius: 0 100% 0 100%; background: var(--leaf); opacity: 0.12; transform: rotate(-20deg); pointer-events: none; }
+.brand { display: flex; gap: 14px; align-items: center; position: relative; }
+.logo { width: 54px; height: 54px; flex: none; }
+.logo .c { fill: var(--leaf); } .logo .l { fill: var(--accent); } .logo .v { stroke: var(--surface); }
+.word { display: grid; line-height: 1; }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: 2.1rem; margin: 0; letter-spacing: 0.02em; text-transform: uppercase; color: var(--fg); }
+.word .ph { font-family: var(--font-display); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.42em; color: var(--accent); margin-top: 4px; text-transform: uppercase; }
+.sub { display: inline-block; margin: 10px 0 0; background: var(--accent); color: var(--accent-ink); font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 12px; border-radius: 99px; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px; position: relative; }
+.stat { background: var(--sunk); border: 1px solid var(--line); border-radius: var(--r); padding: 8px 14px; min-width: 88px; text-align: left; }
+.stat b { display: block; font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.stat.bad b { color: var(--bad); } .stat.warn b { color: var(--warn); } .stat.info b { color: var(--info); }
+button.stat { cursor: pointer; } button.stat:hover { border-color: var(--accent); }
+
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding: 2px; }
+.tabs button { background: var(--surface); border: 1px solid var(--line); border-radius: 99px; padding: 9px 16px; font-family: var(--font-display); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg); white-space: nowrap; }
+.tabs button:hover { border-color: var(--accent); }
+.tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.foot { background: var(--accent); color: var(--accent-ink); border-radius: 18px; padding: 14px 18px; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; text-align: center; }
+.foot svg { width: 18px; height: 18px; flex: none; }
+.foot svg path { fill: var(--accent-ink); opacity: 0.85; }
+.badge { display: inline-block; min-width: 20px; padding: 0 6px; margin-left: 4px; border-radius: 99px; background: var(--warn-bg); color: var(--warn); font-family: var(--font-num); font-size: 0.75rem; text-align: center; }
+.badge:empty { display: none; }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+.search { flex: 1 1 240px; min-width: 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+select.chip { padding-right: 8px; }
+
+.list { display: grid; gap: 8px; }
+.row { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: var(--r); padding: 12px 14px;
+  display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 8px 16px; align-items: center; }
+.row.s-out { border-left-color: var(--bad); } .row.s-low { border-left-color: var(--warn); } .row.s-onorder { border-left-color: var(--info); } .row.s-ok { border-left-color: var(--ok); }
+.name { font-weight: 700; font-size: 1rem; display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; overflow-wrap: anywhere; }
+.meta { color: var(--muted); font-size: 0.82rem; margin-top: 2px; overflow-wrap: anywhere; }
+.desc { font-size: 0.85rem; margin-top: 4px; max-width: 65ch; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.price { font-family: var(--font-num); font-size: 0.8rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pe { font-size: 0.7rem; font-weight: 700; padding: 1px 8px; border-radius: 99px; border: 1px solid currentColor; letter-spacing: 0.02em; }
+.pe-bad { color: var(--bad); } .pe-soon { color: var(--warn); } .pe-later { color: var(--muted); }
+.field textarea { min-height: 70px; resize: vertical; }
+.intro { color: var(--muted); margin: 0 0 12px; max-width: 65ch; }
+.ghead .val { font-family: var(--font-num); font-weight: 700; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.oline input[type="date"] { padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-family: var(--font-num); font-size: 0.8rem; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.scan { border-top: 4px solid var(--leaf); }
+.drop { display: grid; justify-items: center; gap: 8px; text-align: center; padding: 18px 14px; border: 2px dashed var(--line); border-radius: var(--r); background: var(--sunk); }
+.drop.over { border-color: var(--accent); background: var(--ok-bg); }
+.pickrow { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.filebtn.overlay { position: relative; overflow: hidden; }
+.filebtn.overlay input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; font-size: 100px; }
+.filebtn.overlay:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.thumbs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.thumbs img { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); }
+.filebtn { display: inline-flex; align-items: center; gap: 8px; background: var(--sunk); border: 1px dashed var(--accent); color: var(--accent); border-radius: 99px; padding: 10px 16px; font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; }
+.filebtn svg { width: 18px; height: 18px; fill: currentColor; }
+.vh:focus-visible + .hint, .filebtn:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.review { display: grid; gap: 10px; }
+.review h3 { margin: 0; font-family: var(--font-display); font-size: 1rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--accent); }
+.sline { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; border: 1px solid var(--line); border-radius: var(--r); padding: 12px; background: var(--bg); }
+.sline.off { opacity: 0.5; }
+.sline input[type="checkbox"] { width: 20px; height: 20px; margin-top: 26px; accent-color: var(--accent); }
+.sfields { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; min-width: 0; }
+.sfields .wide { grid-column: 1 / -1; }
+.sfields select { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.pricenote { display: block; font-size: 0.82rem; padding: 8px 10px; border-radius: 8px; background: var(--sunk); color: var(--muted); }
+.pricenote.up { background: var(--warn-bg); color: var(--warn); }
+.pricenote.down { background: var(--ok-bg); color: var(--ok); }
+.pcount { color: var(--warn); }
+.wide:empty { display: none; }
+.matchnote { font-size: 0.78rem; color: var(--accent); font-weight: 700; }
+.hctl { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.hdates { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+.hdates input { padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-family: var(--font-num); font-size: 0.85rem; }
+.hsum { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 10px; }
+.hsum .stat { background: var(--surface); }
+.hprod { margin: 0 0 12px; padding: 10px 14px; background: var(--ok-bg); color: var(--ok); border-radius: var(--r); }
+.hday { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; margin-bottom: 12px; }
+.hsale { padding: 10px 14px; border-top: 1px solid var(--line); display: grid; gap: 4px; }
+.hsale .sh { display: flex; justify-content: space-between; gap: 8px; font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+.hsale .sh b { color: var(--fg); font-family: var(--font-num); }
+.hsale.is-refund .sh b { color: var(--warn); }
+.sl.hit span:first-child { font-weight: 800; }
+.sl .hp { color: var(--muted); font-family: var(--font-num); font-size: 0.78rem; }
+.till-side > .ghost { justify-self: start; }
+.quickbtn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border: 2px solid var(--accent); background: var(--surface); color: var(--accent); border-radius: var(--r); padding: 11px 14px; font-family: var(--font-display); font-weight: 800; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.quickbtn:hover { background: var(--ok-bg); }
+.quickbtn svg { width: 18px; height: 18px; fill: var(--leaf); }
+.qmenu { position: fixed; inset: 0; z-index: 40; background: rgba(15, 25, 17, 0.5); display: grid; place-items: start center; padding: max(16px, env(safe-area-inset-top, 0px)) 16px 16px; overflow-y: auto; }
+.qpanel { width: min(920px, 100%); background: var(--bg); border-radius: 20px; padding: 18px; display: grid; gap: 10px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25); }
+.qhead { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.qhead h2 { margin: 0; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; color: var(--accent); font-size: 1.15rem; }
+.qsec { margin: 8px 0 0; font-family: var(--font-display); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.qtiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.qtile { position: relative; }
+.qadd { width: 100%; height: 100%; min-height: 96px; text-align: left; display: grid; align-content: start; gap: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 40px 12px 12px; }
+.qadd:hover, .qadd:focus-visible { border-color: var(--accent); background: var(--ok-bg); }
+.qtile.none .qadd { opacity: 0.6; }
+.qname { font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
+.qmeta { font-size: 0.8rem; color: var(--muted); }
+.qmeta b { color: var(--fg); font-family: var(--font-num); }
+.qin { justify-self: start; font-size: 0.72rem; font-weight: 800; background: var(--accent); color: var(--accent-ink); border-radius: 99px; padding: 2px 8px; }
+.qstar { position: absolute; top: 6px; right: 6px; width: 30px; height: 30px; border: 0; border-radius: 99px; background: none; color: var(--line); font-size: 1.15rem; line-height: 1; }
+.qstar.on { color: var(--warn); }
+.qstar:hover { background: var(--sunk); }
+.batches { display: grid; gap: 6px; margin: 4px 0 8px; }
+.brow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.brow .bexp { flex: 1 1 150px; min-width: 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-family: var(--font-num); }
+.brow .bqty { width: 84px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-family: var(--font-num); text-align: right; }
+.brow .bx { color: var(--muted); font-weight: 700; }
+.flabel { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.bline { font-size: 0.8rem; margin-top: 3px; color: var(--muted); }
+.bline span { font-family: var(--font-num); color: var(--fg); }
+.oline .q input[type="date"] { width: 150px; text-align: left; font-weight: 500; }
+.wo { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.ing { font-size: 0.82rem; margin-top: 3px; overflow-wrap: anywhere; }
+.ing span { font-weight: 800; color: var(--accent); }
+label.check { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; text-transform: none; letter-spacing: 0; color: var(--fg); font-weight: 600; }
+label.check input { width: 18px; height: 18px; accent-color: var(--accent); }
+.till { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.till-main, .till-side { display: grid; gap: 10px; min-width: 0; }
+.till-side { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; }
+.sideh { margin: 0; font-family: var(--font-display); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.modes { display: flex; gap: 4px; background: var(--sunk); padding: 4px; border-radius: 99px; width: fit-content; max-width: 100%; }
+.mode { border: 0; background: none; border-radius: 99px; padding: 8px 16px; font-family: var(--font-display); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+.mode[aria-checked="true"] { background: var(--accent); color: var(--accent-ink); }
+.till.refund .mode[aria-checked="true"] { background: var(--warn); color: var(--surface); }
+.cresults { display: grid; gap: 6px; }
+.cresults:empty { display: none; }
+.cres { display: flex; justify-content: space-between; gap: 10px; align-items: center; width: 100%; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; }
+.cres:hover, .cres:focus-visible { border-color: var(--accent); }
+.cres .meta { margin: 0; }
+.cres b { font-family: var(--font-num); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cartbox { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.till.refund .cartbox { border-color: var(--warn); }
+.cline { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 8px 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.cline .warnline { grid-column: 1 / -1; font-size: 0.78rem; color: var(--warn); font-weight: 700; }
+.cline .stepper input { width: 52px; font-size: 1rem; }
+.cline .stepper button { width: 36px; }
+.cline .pr { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; color: var(--muted); }
+.cline .pr input { width: 74px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-family: var(--font-num); text-align: right; }
+.cline .lt { font-family: var(--font-num); font-weight: 700; min-width: 70px; text-align: right; font-variant-numeric: tabular-nums; }
+.xbtn { border: 0; background: none; color: var(--muted); width: 28px; height: 28px; border-radius: 99px; font-size: 1.1rem; }
+.xbtn:hover { background: var(--bad-bg); color: var(--bad); }
+.cdisc { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 10px 14px; border-top: 1px dashed var(--line); }
+.cdisc .dl { font-family: var(--font-display); font-weight: 700; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; background: var(--sunk); border-radius: 99px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: none; border-radius: 99px; min-width: 38px; padding: 6px 10px; font-weight: 800; color: var(--muted); }
+.seg button[aria-checked="true"] { background: var(--accent); color: var(--accent-ink); }
+#discv { width: 96px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-family: var(--font-num); text-align: right; }
+.damt { font-family: var(--font-num); font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.dtag { color: var(--accent); font-weight: 700; }
+.ctotal { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding: 14px; background: var(--sunk); }
+.ctotal .sum { font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+.ctotal .sum small { display: block; font-family: var(--font-body); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ctotal .actions { gap: 8px; }
+.big { padding: 13px 22px; font-size: 1rem; }
+.till.refund .primary.big { background: var(--warn); color: var(--surface); }
+.sale { border-top: 1px solid var(--line); padding: 10px 0; display: grid; gap: 4px; }
+.sale:first-of-type { border-top: 0; }
+.sale .sh { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+.sale .sh b { color: var(--fg); font-family: var(--font-num); }
+.sale.is-refund .sh b { color: var(--warn); }
+.sl { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 0.86rem; }
+.sl span { min-width: 0; overflow-wrap: anywhere; }
+.sl .done { color: var(--muted); font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+.sl .ghost { padding: 3px 9px; font-size: 0.75rem; white-space: nowrap; }
+.daytotal { display: flex; justify-content: space-between; gap: 8px; padding-top: 10px; border-top: 2px solid var(--leaf); font-weight: 800; }
+.daytotal b { font-family: var(--font-num); }
+@media (max-width: 720px) { .till { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 480px) {
+  .cline { grid-template-columns: minmax(0, 1fr) auto; }
+  .cline .nm { grid-column: 1 / -1; }
+}
+.typechips { display: flex; flex-wrap: wrap; gap: 8px; }
+.tchip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--sunk); border-radius: 99px; padding: 4px 6px 4px 12px; font-weight: 600; font-size: 0.85rem; }
+.tchip small { color: var(--muted); font-family: var(--font-num); font-weight: 500; }
+.tchip button { border: 0; background: none; width: 24px; height: 24px; border-radius: 99px; color: var(--muted); font-size: 1rem; line-height: 1; }
+.tchip button:hover { background: var(--bad-bg); color: var(--bad); }
+.tchip .tc-spacer { width: 6px; }
+.tchip.renaming { padding: 3px 4px 3px 4px; border-color: var(--accent); }
+.tchip.renaming input { width: 160px; max-width: 50vw; border: 0; background: var(--surface); border-radius: 99px; padding: 5px 10px; font-weight: 600; }
+.ghd { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 14px 0 2px; padding-bottom: 6px; border-bottom: 2px solid var(--leaf); font-family: var(--font-display); font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; color: var(--accent); font-size: 1.05rem; }
+.ghd:first-child { margin-top: 0; }
+.ghd small { font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.ghd small b { color: var(--warn); }
+.tag { font-weight: 600; color: var(--fg); }
+.meta .code { font-family: var(--font-num); font-size: 0.78rem; letter-spacing: 0.02em; color: var(--fg); background: var(--sunk); padding: 1px 6px; border-radius: 4px; font-variant-numeric: tabular-nums; }
+.pill { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 8px; border-radius: 99px; }
+.p-out { background: var(--bad-bg); color: var(--bad); } .p-low { background: var(--warn-bg); color: var(--warn); }
+.p-onorder { background: var(--info-bg); color: var(--info); } .p-ok { background: var(--ok-bg); color: var(--ok); }
+.count { display: grid; justify-items: center; gap: 2px; }
+.stepper { display: flex; align-items: stretch; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; background: var(--sunk); }
+.stepper button { width: 40px; border: 0; background: transparent; font-size: 1.2rem; font-weight: 700; }
+.stepper button:hover { background: var(--line); }
+.stepper input { width: 64px; border: 0; border-inline: 1px solid var(--line); background: var(--surface); text-align: center; font-family: var(--font-num); font-weight: 700; font-size: 1.1rem; padding: 8px 2px; font-variant-numeric: tabular-nums; -moz-appearance: textfield; }
+.stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.lvl { font-size: 0.74rem; color: var(--muted); font-family: var(--font-num); }
+.ghost { background: none; border: 1px solid var(--line); border-radius: var(--r); padding: 7px 12px; font-weight: 600; font-size: 0.85rem; }
+.ghost:hover { border-color: var(--accent); }
+.primary { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: var(--r); padding: 10px 16px; font-weight: 700; }
+.primary:disabled { opacity: 0.5; cursor: default; }
+.danger { background: var(--bad-bg); color: var(--bad); border: 0; border-radius: var(--r); padding: 8px 14px; font-weight: 700; }
+
+.editor { grid-column: 1 / -1; border-top: 1px dashed var(--line); padding-top: 12px; display: grid; gap: 12px; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.field input, .field textarea { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.field .hint { font-size: 0.78rem; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.actions .spacer { flex: 1; }
+
+.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: var(--r); padding: 28px 20px; text-align: center; color: var(--muted); }
+.empty h2 { font-family: var(--font-display); color: var(--fg); margin: 0 0 6px; font-size: 1.3rem; }
+.empty p { margin: 0 auto 14px; max-width: 46ch; }
+
+.group { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.group + .group { margin-top: 12px; }
+.ghead { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--sunk); }
+.ghead h3 { margin: 0; font-family: var(--font-display); font-size: 1.1rem; }
+.ghead small { color: var(--muted); font-weight: 600; margin-left: 6px; }
+.oline { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 8px 12px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--line); }
+.oline.done { opacity: 0.6; }
+.oline .q { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--muted); }
+.oline .q input { width: 60px; padding: 6px; text-align: center; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-family: var(--font-num); font-weight: 700; }
+.copybox { width: 100%; min-height: 120px; margin: 0; border: 0; border-top: 1px solid var(--line); padding: 12px 14px; background: var(--sunk); font-family: var(--font-num); font-size: 0.82rem; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 14px; }
+.card + .card { margin-top: 14px; }
+.card h2 { margin: 0; font-family: var(--font-display); font-size: 1.25rem; }
+.card p { margin: 0; color: var(--muted); max-width: 65ch; }
+code { font-family: var(--font-num); font-size: 0.85em; background: var(--sunk); padding: 1px 5px; border-radius: 4px; }
+textarea.bulk { min-height: 150px; font-family: var(--font-num); font-size: 0.85rem; }
+
+.notice { background: var(--warn-bg); color: var(--warn); border-radius: var(--r); padding: 10px 14px; font-weight: 600; font-size: 0.9rem; }
+#toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 99px; font-weight: 600; font-size: 0.9rem; max-width: calc(100% - 32px); }
+.readonly .stepper button, .readonly [data-act="edit"], .readonly [data-act="ordered"], .readonly [data-act="unorder"] { display: none; }
+.readonly .stepper input { pointer-events: none; }
+
+@media (max-width: 560px) {
+  .row { grid-template-columns: minmax(0,1fr) auto; }
+  .row .info { grid-column: 1 / -1; }
+  .count { justify-items: start; }
+  .oline { grid-template-columns: minmax(0,1fr) auto; }
+  .oline .info { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .row, .chip, .stepper button { transition: background-color .15s, border-color .15s; }
+}
+</style>
+
+<div class="app" id="app">
+  <header class="top">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 60 60" aria-hidden="true">
+        <path class="c" d="M22 4h16a3 3 0 0 1 3 3v12h12a3 3 0 0 1 3 3v16a3 3 0 0 1-3 3H41v12a3 3 0 0 1-3 3H22a3 3 0 0 1-3-3V41H7a3 3 0 0 1-3-3V22a3 3 0 0 1 3-3h12V7a3 3 0 0 1 3-3z"/>
+        <path class="l" d="M30 48C18 44 17 30 30 16c13 14 12 28 0 32z"/>
+        <path class="v" d="M30 46V24" fill="none" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="word"><h1>Herba</h1><span class="ph">Pharmacy</span></div>
+        <span class="sub">Stock Room</span>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="stock" aria-selected="true">Stock</button>
+    <button role="tab" data-tab="cash" aria-selected="false">Cashout<span class="badge cartb" id="cartBadge"></span></button>
+    <button role="tab" data-tab="hist" aria-selected="false">Sales history</button>
+    <button role="tab" data-tab="order" aria-selected="false">Order list<span class="badge" id="orderBadge"></span></button>
+    <button role="tab" data-tab="exp" aria-selected="false">Expiring<span class="badge" id="expBadge"></span></button>
+    <button role="tab" data-tab="add" aria-selected="false">Add items</button>
+  </nav>
+
+  <div id="notice" class="notice" hidden></div>
+
+  <main>
+    <section id="tab-stock">
+      <div class="toolbar">
+        <input id="q" class="search" type="search" placeholder="Search name, ingredient, barcode, type or supplier" aria-label="Search stock" autocomplete="off">
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="list" id="list"></div>
+    </section>
+
+    <section id="tab-cash" hidden>
+      <div class="till">
+        <div class="till-main">
+          <div class="modes" role="radiogroup" aria-label="Cashout mode">
+            <button type="button" class="mode" data-act="mode" data-m="sale" role="radio" aria-checked="true">Sale</button>
+            <button type="button" class="mode" data-act="mode" data-m="refund" role="radio" aria-checked="false">Refund / return</button>
+          </div>
+          <input id="cq" class="search" type="search" placeholder="Scan a barcode, or type a product or ingredient" aria-label="Find product to add" autocomplete="off">
+          <button type="button" class="quickbtn" data-act="qopen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Quick Moving Products</button>
+          <div id="cresults" class="cresults"></div>
+          <div id="cart"></div>
+        </div>
+        <div class="qmenu" id="qmenu" hidden role="dialog" aria-modal="true" aria-labelledby="qtitle">
+          <div class="qpanel">
+            <div class="qhead">
+              <h2 id="qtitle">Quick Moving Products</h2>
+              <button type="button" class="primary" data-act="qclose">Done</button>
+            </div>
+            <p class="hint" id="qsub">Tap a product to add it to the basket. Tap ★ to keep a product on this list.</p>
+            <div class="qgrid" id="qgrid"></div>
+          </div>
+        </div>
+        <aside class="till-side">
+          <h2 class="sideh">Today's sales</h2>
+          <div id="sales"></div>
+          <button type="button" class="ghost" data-act="tab" data-t="hist">See earlier sales</button>
+        </aside>
+      </div>
+    </section>
+
+    <section id="tab-hist" hidden>
+      <div class="hctl">
+        <div class="chips" id="hpresets"></div>
+        <div class="hdates">
+          <label for="hfrom">From</label><input id="hfrom" type="date">
+          <label for="hto">To</label><input id="hto" type="date">
+        </div>
+      </div>
+      <div class="hctl">
+        <input id="hq" class="search" type="search" placeholder="Find sales of a product" aria-label="Find sales of a product" autocomplete="off">
+        <button type="button" class="ghost" data-act="hdl">Download spreadsheet</button>
+      </div>
+      <div id="hsum"></div>
+      <div id="hlist"></div>
+    </section>
+
+    <section id="tab-order" hidden>
+      <div id="orders"></div>
+    </section>
+
+    <section id="tab-exp" hidden>
+      <p class="intro">Batches still on the shelf that have expired or expire within the next 30 days, soonest first. Put these at the front, sell them first, or arrange a return with the supplier. Use "Remove from stock" when a batch is thrown out or sent back.</p>
+      <div id="expiring"></div>
+    </section>
+
+    <section id="tab-add" hidden>
+      <section class="card scan" id="scanCard">
+        <h2>Scan an invoice</h2>
+        <p>Take or upload a photo of a supplier invoice. Claude reads the product lines and fills in name, quantity, selling price and expiry for you to check before anything is saved.</p>
+        <div class="drop" id="scanDrop">
+          <div class="pickrow">
+            <span class="filebtn overlay">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1zm8 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/></svg>
+              Take photo
+              <input id="scanCam" type="file" accept="image/*" capture="environment" aria-label="Take a photo of the invoice">
+            </span>
+            <span class="filebtn overlay">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 12h14l-4.5-6-3.5 4.5-2.5-3z"/></svg>
+              Choose from photos
+              <input id="scanFile" type="file" accept="image/*" multiple aria-label="Choose invoice photos">
+            </span>
+          </div>
+          <span class="hint">On a computer you can also drag a photo here or paste one (Ctrl+V)</span>
+          <div class="thumbs" id="scanThumbs"></div>
+          <span id="scanFiles" class="hint">No photo chosen</span>
+        </div>
+        <div id="scanNote" class="notice" hidden></div>
+        <div class="fields">
+          <div class="field"><label for="scanSup">Supplier</label><input id="scanSup" list="supplierList" autocomplete="off" placeholder="Blank: read it from the invoice"></div>
+          <div class="field"><label for="scanType">Product type for new items</label><input id="scanType" list="typeList" autocomplete="off" placeholder="Optional"></div>
+        </div>
+        <div class="actions">
+          <button class="primary" type="button" id="scanGo">Read invoice</button>
+          <button class="ghost" type="button" id="scanStop" hidden>Stop</button>
+          <span id="scanStatus" class="hint" role="status"></span>
+        </div>
+        <div id="scanReview"></div>
+      </section>
+
+      <form class="card" id="addForm" novalidate>
+        <h2>Add one item</h2>
+        <div class="fields">
+          <div class="field" style="grid-column: 1 / -1"><label for="a-name">Item name</label><input id="a-name" placeholder="e.g. Paracetamol 500mg tabs x24" required></div>
+          <div class="field"><label for="a-bc">Barcode</label><input id="a-bc" inputmode="numeric" autocomplete="off" placeholder="Type or scan"><span class="hint">The number under the barcode on the box</span></div>
+          <div class="field"><label for="a-supplier">Supplier / wholesaler</label><input id="a-supplier" list="supplierList" placeholder="Who you order from"></div>
+          <div class="field"><label for="a-type">Product type</label><input id="a-type" list="typeList" autocomplete="off" placeholder="Pick or type a new one"></div>
+          <div class="field"><label for="a-on">On shelf now</label><input id="a-on" type="number" inputmode="numeric" min="0" value="0"></div>
+          <div class="field"><label for="a-min">Minimum</label><input id="a-min" type="number" inputmode="numeric" min="0" value="2"><span class="hint">Flag for ordering at or below this</span></div>
+          <div class="field"><label for="a-rq">Usual order qty</label><input id="a-rq" type="number" inputmode="numeric" min="0" placeholder="Auto"><span class="hint">Leave blank to top up to twice the minimum</span></div>
+          <div class="field"><label for="a-price">Selling price (€)</label><input id="a-price" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00"></div>
+          <div class="field"><label for="a-exp">Expiry date</label><input id="a-exp" type="date"><span class="hint">For the units above. Add more batches later under Edit.</span></div>
+          <div class="field" style="grid-column: 1 / -1"><label for="a-ing">Active ingredient(s)</label><input id="a-ing" autocomplete="off" placeholder="e.g. Paracetamol 500mg, Caffeine 65mg"><span class="hint">For medicines, medical products and supplements. Leave blank for cosmetics and toiletries.</span></div>
+          <div class="field" style="grid-column: 1 / -1"><label for="a-desc">Description</label><textarea id="a-desc" placeholder="e.g. Pack of 24, for pain and fever. Keep below 25°C."></textarea></div>
+        </div>
+        <div class="actions"><button class="primary" type="submit">Add item</button></div>
+      </form>
+
+      <div class="card">
+        <h2>Add many at once</h2>
+        <p>Paste one item per line, straight from a spreadsheet or typed out. Columns: <code>name, supplier, on shelf, minimum, order qty, barcode, product type</code>. Only the name is required; leave a column empty with two commas.</p>
+        <div class="field">
+          <label for="bulk">Item list</label>
+          <textarea id="bulk" class="bulk" placeholder="Ibuprofen 400mg x24, Wholesaler A, 6, 4, 12, 5012345678900, OTC painkillers&#10;Vitamin D3 1000IU, Wholesaler B, 2, 3&#10;Insulin pen needles 4mm, Wholesaler A, 10, 5, 10"></textarea>
+          <span class="hint" id="bulkHint">Nothing pasted yet</span>
+        </div>
+        <div class="actions"><button class="primary" id="bulkAdd" type="button" disabled>Add items</button></div>
+      </div>
+      <div class="card">
+        <h2>Product types</h2>
+        <p>Set up the types you sort stock by, such as OTC painkillers, Vitamins, Skincare or Fridge items. A type you type on an item is added here automatically.</p>
+        <form class="actions" id="typeForm" novalidate>
+          <div class="field" style="flex:1 1 220px"><label for="t-new">New type</label><input id="t-new" autocomplete="off" placeholder="e.g. Baby care"></div>
+          <button class="primary" type="submit" style="align-self:flex-end">Add type</button>
+        </form>
+        <div class="typechips" id="typeChips"></div>
+      </div>
+      <div class="card">
+        <h2>Suppliers</h2>
+        <p>Keep your list of wholesalers here so everyone picks the same name when adding items. Renaming a supplier updates every item that uses it.</p>
+        <form class="actions" id="supForm" novalidate>
+          <div class="field" style="flex:1 1 220px"><label for="s-new">New supplier</label><input id="s-new" autocomplete="off" placeholder="e.g. AGS Limited"></div>
+          <button class="primary" type="submit" style="align-self:flex-end">Add supplier</button>
+        </form>
+        <div class="typechips" id="supChips"></div>
+      </div>
+      <div class="card" id="bkCard">
+        <h2>Backups and moving data</h2>
+        <p>Download a backup to keep a copy, or to move your stock into the Windows app (Add items › Phones and backups › Restore). To bring data the other way, download a backup in the Windows app and restore it here.</p>
+        <div class="actions">
+          <button class="primary" type="button" id="bkDl">Download backup</button>
+          <span class="filebtn overlay">Restore from backup<input id="bkFile" type="file" accept=".json,application/json" aria-label="Choose a backup file to restore"></span>
+        </div>
+        <div id="bkBox"></div>
+      </div>
+      <datalist id="supplierList"></datalist>
+      <datalist id="typeList"></datalist>
+    </section>
+  </main>
+  <footer class="foot">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 18C3 15 3 7 10 2c7 5 7 13 0 16z"/></svg>
+    <span>Herba Pharmacy · Care that grows with you</span>
+  </footer>
+  <div id="toast" role="status" hidden></div>
+</div>
+
+<script>
+(function () {
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const num = (v, d) => { const n = parseInt(v, 10); return Number.isFinite(n) && n >= 0 ? n : d; };
+
+  const state = {
+    items: [], ready: false, failed: null, tab: "stock", q: "", filter: "all", supplier: "",
+    type: "", group: "", savedTypes: [], savedSuppliers: [], quick: [], renamingSup: null,
+    editing: null, confirmDel: null, pending: {}, ordQty: {}, copyOpen: null, canWrite: true, listDirty: false,
+  };
+  let db = null, user = null, me = null, names = {};
+  const timers = {}, chains = {};
+
+  try { const t = localStorage.getItem("stockroom.tab"); if (t) state.tab = t; } catch (e) {}
+  try { const g = localStorage.getItem("stockroom.group"); if (g === "type" || g === "supplier") state.group = g; } catch (e) {}
+  function productTypes() {
+    const all = state.savedTypes.concat(state.items.map((i) => (i.type || "").trim())).filter(Boolean);
+    const seen = {}, out = [];
+    all.forEach((t) => { const k = t.toLowerCase(); if (!seen[k]) { seen[k] = 1; out.push(t); } });
+    return out.sort((a, b) => a.localeCompare(b));
+  }
+  function saveTypes(list) {
+    if (!db) return;
+    return saveSettings();
+  }
+  function saveSettings() {
+    if (!db) return;
+    return queue("settings", () => db.doc("meta/settings").set({ types: state.savedTypes, suppliers: state.savedSuppliers, quick: state.quick }));
+  }
+
+  // ---------- derived ----------
+  function onHand(it) { return state.pending[it.id] != null ? state.pending[it.id] : num(it.onHand, 0); }
+  // ----- batches: each product holds [{exp: "YYYY-MM-DD" | "", qty}] -----
+  const validExp = (e) => /^\d{4}-\d{2}-\d{2}$/.test(String(e || "")) ? String(e) : "";
+  function getBatches(it) {
+    if (Array.isArray(it.batches)) return it.batches.map((b) => ({ exp: validExp(b && b.exp), qty: num(b && b.qty, 0) })).filter((b) => b.qty > 0);
+    const q = num(it.onHand, 0);
+    return q > 0 ? [{ exp: validExp(it.expiry), qty: q }] : [];
+  }
+  function tidyBatches(list) {
+    const m = {};
+    list.forEach((b) => { const e = validExp(b.exp), q = num(b.qty, 0); if (q > 0) m[e] = (m[e] || 0) + q; });
+    return Object.keys(m).map((e) => ({ exp: e, qty: m[e] })).sort((a, b) => (a.exp || "9999") < (b.exp || "9999") ? -1 : 1);
+  }
+  // the fields to save for a batch list: the batches, the total on the shelf, and the earliest date
+  function batchPatch(list, it) {
+    const bs = tidyBatches(list);
+    const total = bs.reduce((x, b) => x + b.qty, 0);
+    const dated = bs.filter((b) => b.exp);
+    const patch = { batches: bs, onHand: total, expiry: dated.length ? dated[0].exp : (total > 0 ? "" : validExp(it && it.expiry)) };
+    if (it && it.onOrder && total > num(it.min, 0)) { patch.onOrder = false; patch.orderedAt = null; }
+    return patch;
+  }
+  // take n units, soonest-expiring first (undated last); returns [remaining, taken]
+  function takeFEFO(list, n) {
+    const bs = tidyBatches(list).map((b) => Object.assign({}, b)), taken = [];
+    for (const b of bs) { if (n <= 0) break; const t = Math.min(b.qty, n); if (t > 0) { b.qty -= t; n -= t; taken.push({ exp: b.exp, qty: t }); } }
+    return [bs, taken];
+  }
+  // set the total: fewer → remove from soonest-expiring; more → add to the newest batch
+  function batchesForTotal(it, total) {
+    const bs = getBatches(it), cur = bs.reduce((x, b) => x + b.qty, 0);
+    if (total < cur) return takeFEFO(bs, cur - total)[0];
+    if (total > cur) {
+      const t = tidyBatches(bs);
+      if (t.length) t[t.length - 1].qty += total - cur; else t.push({ exp: validExp(it.expiry), qty: total - cur });
+      return t;
+    }
+    return bs;
+  }
+  function batchRowHtml(b) {
+    return `<div class="brow"><input type="date" class="bexp" value="${esc(b ? b.exp : "")}" aria-label="Expiry date"><span class="bx">×</span><input type="number" class="bqty" min="0" inputmode="numeric" value="${b ? b.qty : ""}" placeholder="Qty" aria-label="Quantity in this batch"><button type="button" class="xbtn" data-act="rmbatch" aria-label="Remove this batch" title="Remove this batch">×</button></div>`;
+  }
+  function batchLabel(b) { return b.exp ? new Date(b.exp + "T12:00:00").toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "no date"; }
+  function status(it) {
+    const h = onHand(it), m = num(it.min, 0);
+    if (it.onOrder && h <= m) return "onorder";
+    if (h <= 0) return "out";
+    if (h <= m) return "low";
+    return "ok";
+  }
+  const LABEL = { out: "Out of stock", low: "Order", onorder: "On order", ok: "In stock" };
+  function suggested(it) { const rq = num(it.reorderQty, 0); return rq > 0 ? rq : Math.max(num(it.min, 0) * 2 - onHand(it), 1); }
+  function suppliers() {
+    const seen = {}, out = [];
+    state.savedSuppliers.concat(state.items.map((i) => (i.supplier || "").trim())).filter(Boolean)
+      .forEach((s) => { const k = s.toLowerCase(); if (!seen[k]) { seen[k] = 1; out.push(s); } });
+    return out.sort((a, b) => a.localeCompare(b));
+  }
+  function ago(iso) {
+    if (!iso) return "";
+    const s = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (s < 60) return "just now";
+    if (s < 3600) return Math.floor(s / 60) + " min ago";
+    if (s < 86400) return Math.floor(s / 3600) + " h ago";
+    const d = Math.floor(s / 86400);
+    return d === 1 ? "yesterday" : d + " days ago";
+  }
+  function price(v) { const n = parseFloat(String(v == null ? "" : v).replace(",", ".")); return Number.isFinite(n) && n >= 0 ? Math.round(n * 100) / 100 : null; }
+  function eur(n) { return "€" + n.toFixed(2); }
+  function daysLeft(it) {
+    const p = String(it.expiry || "").split("-").map(Number);
+    if (p.length !== 3 || !p[0] || !p[1] || !p[2]) return null;
+    const d = new Date(p[0], p[1] - 1, p[2]), t = new Date(); t.setHours(0, 0, 0, 0);
+    return Math.round((d - t) / 86400000);
+  }
+  function fmtDate(s) { const p = String(s).split("-").map(Number); return new Date(p[0], p[1] - 1, p[2]).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }); }
+  function expLabel(n) {
+    if (n < 0) return "Expired " + (-n === 1 ? "yesterday" : -n + " days ago");
+    if (n === 0) return "Expires today";
+    return "Expires in " + n + (n === 1 ? " day" : " days");
+  }
+  function expClass(n) { return n <= 7 ? "pe-bad" : n <= 30 ? "pe-soon" : "pe-later"; }
+  const EXP_DAYS = 30;
+  // one entry per batch that has expired or expires within EXP_DAYS
+  function expiringItems() {
+    const out = [];
+    state.items.forEach((it) => {
+      if (onHand(it) <= 0) return;
+      getBatches(it).forEach((b) => { if (!b.exp) return; const d = daysLeft({ expiry: b.exp }); if (d !== null && d <= EXP_DAYS) out.push({ it, b, d }); });
+    });
+    return out.sort((a, b) => a.d - b.d);
+  }
+  function who(id) { if (!id) return ""; if (id === me) return "you"; return names[id] || ""; }
+
+  // ---------- rendering ----------
+  function renderStats() {
+    const it = state.items;
+    const c = { out: 0, low: 0, onorder: 0 };
+    it.forEach((i) => { const s = status(i); if (c[s] != null) c[s]++; });
+    const need = c.out + c.low;
+    $("#stats").innerHTML =
+      `<div class="stat"><b>${it.length}</b><span>Items</span></div>` +
+      `<button class="stat warn" data-act="jump" data-f="need"><b>${need}</b><span>To order</span></button>` +
+      `<button class="stat bad" data-act="jump" data-f="out"><b>${c.out}</b><span>Out</span></button>` +
+      `<button class="stat bad" data-act="jump" data-f="exp"><b>${expiringItems().length}</b><span>Expiring</span></button>`;
+    $("#orderBadge").textContent = need ? String(need) : "";
+    const ne = expiringItems().length;
+    $("#expBadge").textContent = ne ? String(ne) : "";
+  }
+
+  function renderChips() {
+    const f = state.filter;
+    const chip = (k, t) => `<button class="chip" data-act="filter" data-f="${k}" aria-pressed="${f === k}">${t}</button>`;
+    const sup = suppliers();
+    const types = productTypes();
+    const opt = (v, t, cur) => `<option value="${esc(v)}"${v === cur ? " selected" : ""}>${esc(t)}</option>`;
+    $("#chips").innerHTML = chip("all", "All") + chip("need", "To order") + chip("out", "Out") +
+      (types.length ? `<select class="chip" id="typeSel" aria-label="Filter by product type">${opt("", "All types", state.type)}${types.map((t) => opt(t, t, state.type)).join("")}</select>` : "") +
+      (sup.length ? `<select class="chip" id="supSel" aria-label="Filter by supplier">${opt("", "All suppliers", state.supplier)}${sup.map((s) => opt(s, s, state.supplier)).join("")}</select>` : "") +
+      `<select class="chip" id="groupSel" aria-label="Organise list">${opt("", "No grouping", state.group)}${opt("type", "Group by type", state.group)}${opt("supplier", "Group by supplier", state.group)}</select>`;
+    $("#supplierList").innerHTML = sup.map((s) => `<option value="${esc(s)}">`).join("");
+    $("#typeList").innerHTML = types.map((t) => `<option value="${esc(t)}">`).join("");
+    const counts = {};
+    state.items.forEach((it) => { const t = (it.type || "").trim(); if (t) counts[t] = (counts[t] || 0) + 1; });
+    $("#typeChips").innerHTML = types.length
+      ? types.map((t) => `<span class="tchip">${esc(t)} <small>${counts[t] || 0}</small>${counts[t] ? `<span class="tc-spacer"></span>` : `<button type="button" data-act="deltype" data-t="${esc(t)}" aria-label="Remove ${esc(t)}" title="Remove">×</button>`}</span>`).join("")
+      : `<p>No types yet.</p>`;
+    renderSuppliers(sup);
+  }
+
+  function renderSuppliers(sup) {
+    const box = $("#supChips");
+    const a = document.activeElement;
+    if (a && box.contains(a) && a.tagName === "INPUT") return;
+    const counts = {};
+    state.items.forEach((it) => { const s = (it.supplier || "").trim(); if (s) counts[s] = (counts[s] || 0) + 1; });
+    box.innerHTML = !sup.length ? `<p>No suppliers yet.</p>` : sup.map((s) => {
+      if (state.renamingSup === s) {
+        return `<form class="tchip renaming" data-rename="${esc(s)}"><label class="vh" for="rn-sup">New name for ${esc(s)}</label><input id="rn-sup" value="${esc(s)}" autocomplete="off"><button type="submit" title="Save" aria-label="Save new name">✓</button><button type="button" data-act="norename" title="Cancel" aria-label="Cancel">×</button></form>`;
+      }
+      const n = counts[s] || 0;
+      return `<span class="tchip">${esc(s)} <small>${n}</small>
+        <button type="button" data-act="rensup" data-s="${esc(s)}" aria-label="Rename ${esc(s)}" title="Rename">✎</button>
+        ${n ? "" : `<button type="button" data-act="delsup" data-s="${esc(s)}" aria-label="Remove ${esc(s)}" title="Remove">×</button>`}</span>`;
+    }).join("");
+    const inp = $("#rn-sup"); if (inp) { inp.focus(); inp.select(); }
+  }
+
+  function editorHtml(it) {
+    const id = esc(it.id);
+    return `<form class="editor" data-edit="${id}">
+      <div class="fields">
+        <div class="field" style="grid-column:1/-1"><label for="e-name-${id}">Item name</label><input id="e-name-${id}" name="name" value="${esc(it.name)}"></div>
+        <div class="field"><label for="e-bc-${id}">Barcode</label><input id="e-bc-${id}" name="barcode" inputmode="numeric" autocomplete="off" value="${esc(it.barcode)}"></div>
+        <div class="field"><label for="e-sup-${id}">Supplier</label><input id="e-sup-${id}" name="supplier" list="supplierList" value="${esc(it.supplier)}"></div>
+        <div class="field"><label for="e-type-${id}">Product type</label><input id="e-type-${id}" name="type" list="typeList" autocomplete="off" value="${esc(it.type)}"></div>
+        <div class="field"><label for="e-min-${id}">Minimum</label><input id="e-min-${id}" name="min" type="number" min="0" inputmode="numeric" value="${num(it.min, 0)}"></div>
+        <div class="field"><label for="e-rq-${id}">Usual order qty</label><input id="e-rq-${id}" name="reorderQty" type="number" min="0" inputmode="numeric" placeholder="Auto" value="${num(it.reorderQty, 0) || ""}"></div>
+        <div class="field"><label for="e-price-${id}">Selling price (€)</label><input id="e-price-${id}" name="price" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00" value="${price(it.price) != null ? price(it.price).toFixed(2) : ""}"></div>
+        <div class="field" style="grid-column:1/-1"><span class="flabel">Batches on the shelf</span>
+          <div class="batches" data-batches="${id}">${getBatches(it).map((b) => batchRowHtml(b)).join("") || ""}</div>
+          <div class="actions"><button type="button" class="ghost" data-act="addbatch" data-id="${id}">Add batch</button><span class="hint">One line per expiry date. The total on the shelf is the sum of the batches.</span></div>
+        </div>
+        <div class="field" style="grid-column:1/-1"><label for="e-ing-${id}">Active ingredient(s)</label><input id="e-ing-${id}" name="ingredients" autocomplete="off" placeholder="e.g. Clotrimazole 2%" value="${esc(it.ingredients)}"><span class="hint">For medicines, medical products and supplements. Leave blank for cosmetics and toiletries.</span></div>
+        <div class="field" style="grid-column:1/-1"><label class="check" for="e-quick-${id}"><input type="checkbox" id="e-quick-${id}" name="quick" ${isQuick(it.id) ? "checked" : ""}> Show in Quick Moving Products</label></div>
+        <div class="field" style="grid-column:1/-1"><label for="e-desc-${id}">Description</label><textarea id="e-desc-${id}" name="description">${esc(it.description)}</textarea></div>
+      </div>
+      <div class="actions">
+        <button class="primary" type="submit">Save changes</button>
+        <button class="ghost" type="button" data-act="cancel">Cancel</button>
+        <span class="spacer"></span>
+        ${state.confirmDel === it.id
+          ? `<span>Remove this item for everyone?</span><button class="danger" type="button" data-act="del" data-id="${id}">Yes, remove</button><button class="ghost" type="button" data-act="nodel">Keep it</button>`
+          : `<button class="ghost" type="button" data-act="askdel" data-id="${id}">Remove item</button>`}
+      </div>
+    </form>`;
+  }
+
+  function renderList() {
+    const el = $("#list");
+    const a = document.activeElement;
+    if (a && el.contains(a) && (a.tagName === "INPUT" || a.tagName === "TEXTAREA")) { state.listDirty = true; return; }
+    state.listDirty = false;
+
+    if (state.failed) { el.innerHTML = `<div class="empty"><h2>Stock can't load here</h2><p>${state.failed === "nodb" ? "Open this page on claude.ai while signed in to see and update the shared stock." : "The stock list stopped updating. Reload the page to reconnect."}</p></div>`; return; }
+    if (!state.ready) { el.innerHTML = `<div class="empty"><h2>Loading stock…</h2><p>Fetching the latest counts.</p></div>`; return; }
+    if (!state.items.length) {
+      el.innerHTML = `<div class="empty"><h2>No items yet</h2><p>Start with the 50 to 100 lines you order most often. Add them one by one, or paste a whole list in one go.</p><button class="primary" data-act="tab" data-t="add">Add your first items</button></div>`;
+      return;
+    }
+    const q = state.q.trim().toLowerCase();
+    const rows = state.items
+      .filter((it) => {
+        const s = status(it);
+        if (state.filter === "need" && !(s === "low" || s === "out")) return false;
+        if (state.filter === "out" && s !== "out") return false;
+        if (state.filter === "onorder" && s !== "onorder") return false;
+        if (state.supplier && (it.supplier || "").trim() !== state.supplier) return false;
+        if (state.type && (it.type || "").trim() !== state.type) return false;
+        if (q) {
+          const qd = q.replace(/\s+/g, "");
+          const textHit = [it.name, it.supplier, it.type, it.description, it.ingredients].join(" ").toLowerCase().includes(q);
+          const codeHit = qd && bc(it.barcode).includes(qd);
+          if (!textHit && !codeHit) return false;
+        }
+        return true;
+      })
+      .sort((x, y) => String(x.name || "").localeCompare(String(y.name || "")));
+
+    if (!rows.length) { el.innerHTML = `<div class="empty"><h2>Nothing matches</h2><p>Try a different search or filter.</p></div>`; return; }
+
+    const rowHtml = (it) => {
+      const s = status(it), id = esc(it.id), w = who(it.updatedBy);
+      const rq = num(it.reorderQty, 0);
+      const dl = daysLeft(it), pr = price(it.price);
+      const expPill = dl === null ? "" : `<span class="pe ${expClass(dl)}" title="Expiry ${esc(fmtDate(it.expiry))}">${dl <= EXP_DAYS ? expLabel(dl) : "Exp " + esc(fmtDate(it.expiry))}</span>`;
+      const metaBits = [it.barcode ? `<span class="code">${esc(it.barcode)}</span>` : "", it.type && state.group !== "type" ? `<span class="tag">${esc(it.type)}</span>` : "", state.group === "supplier" ? "" : it.supplier ? esc(it.supplier) : "No supplier", it.updatedAt ? "Counted " + ago(it.updatedAt) + (w ? " by " + esc(w) : "") : ""].filter(Boolean);
+      return `<article class="row s-${s}" data-id="${id}">
+        <div class="info">
+          <div class="name">${esc(it.name || "Unnamed item")} <span class="pill p-${s}">${LABEL[s]}</span> ${expPill}</div>
+          <div class="meta">${metaBits.join(" · ")}</div>
+          ${it.ingredients ? `<div class="ing"><span>Active:</span> ${esc(it.ingredients)}</div>` : ""}
+          ${(() => { const bs = getBatches(it); return bs.length > 1 ? `<div class="bline">Batches: ${bs.map((x) => `<span>${x.qty} × ${batchLabel(x)}</span>`).join(" · ")}</div>` : ""; })()}
+          ${it.description ? `<div class="desc">${esc(it.description)}</div>` : ""}
+        </div>
+        <div class="count">
+          <div class="stepper">
+            <button type="button" data-act="dec" data-id="${id}" aria-label="One less ${esc(it.name)}">−</button>
+            <input id="c-${id}" type="number" inputmode="numeric" min="0" value="${onHand(it)}" data-count="${id}" aria-label="On shelf: ${esc(it.name)}">
+            <button type="button" data-act="inc" data-id="${id}" aria-label="One more ${esc(it.name)}">+</button>
+          </div>
+          <div class="lvl">min ${num(it.min, 0)} · order ${rq || "auto"}</div>
+          ${pr != null ? `<div class="price">${eur(pr)}</div>` : ""}
+        </div>
+        <button class="ghost" type="button" data-act="edit" data-id="${id}">${state.editing === it.id ? "Close" : "Edit"}</button>
+        ${state.editing === it.id ? editorHtml(it) : ""}
+      </article>`;
+    };
+
+    if (!state.group) { el.innerHTML = rows.map(rowHtml).join(""); return; }
+    const field = state.group, none = field === "type" ? "No type set" : "No supplier set";
+    const groups = {};
+    rows.forEach((it) => { const k = (it[field] || "").trim() || none; (groups[k] = groups[k] || []).push(it); });
+    const keys = Object.keys(groups).sort((x, y) => (x === none) - (y === none) || x.localeCompare(y));
+    el.innerHTML = keys.map((k) => {
+      const list = groups[k];
+      const need = list.filter((it) => { const s = status(it); return s === "low" || s === "out"; }).length;
+      return `<h2 class="ghd">${esc(k)} <small>${list.length} item${list.length === 1 ? "" : "s"}${need ? ` · <b>${need} to order</b>` : ""}</small></h2>${list.map(rowHtml).join("")}`;
+    }).join("");
+  }
+
+  function orderText(sup, list) {
+    const d = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+    return `Order for ${sup} (${d})\n` + list.map((it) => `${it.name}  x ${state.ordQty[it.id] != null ? state.ordQty[it.id] : suggested(it)}`).join("\n");
+  }
+
+  function renderOrders() {
+    const el = $("#orders");
+    const a = document.activeElement;
+    if (a && el.contains(a) && a.tagName === "INPUT") return;
+    if (!state.ready) { el.innerHTML = `<div class="empty"><h2>Loading…</h2></div>`; return; }
+    const need = state.items.filter((it) => { const s = status(it); return s === "low" || s === "out" || s === "onorder"; });
+    if (!need.length) { el.innerHTML = `<div class="empty"><h2>Nothing to order</h2><p>Every item is above its minimum. Items appear here as soon as someone counts them at or below the minimum.</p></div>`; return; }
+    const groups = {};
+    need.forEach((it) => { const k = (it.supplier || "").trim() || "No supplier set"; (groups[k] = groups[k] || []).push(it); });
+    el.innerHTML = Object.keys(groups).sort((x, y) => x.localeCompare(y)).map((sup) => {
+      const list = groups[sup].sort((x, y) => String(x.name).localeCompare(String(y.name)));
+      const todo = list.filter((it) => status(it) !== "onorder");
+      const done = list.filter((it) => status(it) === "onorder");
+      const key = esc(sup);
+      const line = (it, isDone) => {
+        const id = esc(it.id), q = state.ordQty[it.id] != null ? state.ordQty[it.id] : suggested(it);
+        return `<div class="oline${isDone ? " done" : ""}">
+          <div class="info"><div class="name">${esc(it.name)} <span class="pill p-${status(it)}">${LABEL[status(it)]}</span></div>
+          <div class="meta">On shelf ${onHand(it)} · min ${num(it.min, 0)}${isDone && it.orderedAt ? " · ordered " + ago(it.orderedAt) : ""}</div></div>
+          ${isDone ? `<span></span><button class="ghost" type="button" data-act="unorder" data-id="${id}">Undo</button>`
+            : `<label class="q" for="oq-${id}">Qty <input id="oq-${id}" type="number" min="1" inputmode="numeric" value="${q}" data-oq="${id}"></label>
+               <button class="ghost" type="button" data-act="ordered" data-id="${id}">Mark ordered</button>`}
+        </div>`;
+      };
+      return `<section class="group">
+        <div class="ghead"><h3>${key}<small>${todo.length} to order${done.length ? ", " + done.length + " on order" : ""}</small></h3>
+          ${todo.length ? `<button class="ghost" type="button" data-act="copy" data-sup="${key}">Copy order</button>` : ""}</div>
+        ${todo.map((it) => line(it, false)).join("")}${done.map((it) => line(it, true)).join("")}
+        ${state.copyOpen === sup ? `<textarea class="copybox" id="copybox" readonly aria-label="Order text">${esc(orderText(sup, todo))}</textarea>` : ""}
+      </section>`;
+    }).join("");
+  }
+
+  function renderExpiry() {
+    const el = $("#expiring");
+    const a = document.activeElement;
+    if (a && el.contains(a) && a.tagName === "INPUT") return;
+    if (!state.ready) { el.innerHTML = `<div class="empty"><h2>Loading…</h2></div>`; return; }
+    const list = expiringItems();
+    if (!list.length) {
+      const dated = state.items.filter((it) => daysLeft(it) !== null).length;
+      el.innerHTML = `<div class="empty"><h2>Nothing expiring soon</h2><p>${dated ? "No stocked item expires in the next 30 days." : "No items have an expiry date yet. Add one under Edit on any item, using the earliest date on the shelf."}</p></div>`;
+      return;
+    }
+    const bands = [
+      { title: "Expired", test: (d) => d < 0 },
+      { title: "This week", test: (d) => d >= 0 && d <= 7 },
+      { title: "Within 30 days", test: (d) => d > 7 },
+    ];
+    el.innerHTML = bands.map((b) => {
+      const rows = list.filter((r) => b.test(r.d));
+      if (!rows.length) return "";
+      const units = rows.reduce((s, r) => s + r.b.qty, 0);
+      const total = rows.reduce((s, r) => s + (price(r.it.price) || 0) * r.b.qty, 0);
+      return `<section class="group">
+        <div class="ghead"><h3>${b.title}<small>${units} unit${units === 1 ? "" : "s"}</small></h3>
+          ${total > 0 ? `<span class="val" title="Units in these batches × selling price">${eur(total)}</span>` : ""}</div>
+        ${rows.map(({ it, b: bt, d }) => {
+          const key = esc(it.id + "|" + bt.exp), pr = price(it.price), all = onHand(it);
+          const bits = [`${bt.qty} of ${all} on shelf`, it.type ? esc(it.type) : "", pr != null ? eur(pr) + " each" : "", it.supplier ? esc(it.supplier) : ""].filter(Boolean);
+          const ctl = state.confirmWo === it.id + "|" + bt.exp
+            ? `<span class="wo"><button class="danger" type="button" data-act="dowo" data-k="${key}">Remove ${bt.qty}</button><button class="ghost" type="button" data-act="nowo">Keep</button></span>`
+            : `<button class="ghost" type="button" data-act="askwo" data-k="${key}" title="Take this batch off the stock count, e.g. when thrown out or returned to the supplier">Remove from stock</button>`;
+          return `<div class="oline">
+            <div class="info"><div class="name">${bt.qty} × ${esc(it.name)} <span class="pe ${expClass(d)}">${expLabel(d)}</span></div>
+              <div class="meta">${esc(fmtDate(bt.exp))} · ${bits.join(" · ")}</div></div>
+            <label class="q" for="ex-${key}">Date <input id="ex-${key}" type="date" value="${esc(bt.exp)}" data-exp="${key}"></label>
+            ${ctl}
+          </div>`;
+        }).join("")}
+      </section>`;
+    }).join("");
+  }
+
+  function renderTabs() {
+    document.querySelectorAll(".tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === state.tab)));
+    ["stock", "cash", "hist", "order", "exp", "add"].forEach((t) => { $("#tab-" + t).hidden = t !== state.tab; });
+  }
+
+  function render() {
+    document.body.classList.toggle("readonly", !state.canWrite);
+    const n = $("#notice");
+    n.hidden = state.canWrite;
+    n.textContent = state.canWrite ? "" : "You can view stock but not change it. Ask the page owner to give you Contributor access.";
+    renderTabs(); renderStats(); renderChips(); renderList(); renderOrders(); renderExpiry();
+    if (typeof renderTill === "function") renderTill();
+  }
+
+  let toastT;
+  function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2600); }
+
+  // ---------- writes ----------
+  function writeErr(e) {
+    const code = e && e.code;
+    if (code === "invalid_argument") { state.canWrite = false; render(); toast("This change wasn't saved: you have view-only access."); }
+    else if (code === "quota_exceeded") toast("The stock list is full. Remove old items to add more.");
+    else toast("Couldn't save. Check your connection and try again.");
+  }
+  function queue(id, fn) {
+    chains[id] = (chains[id] || Promise.resolve()).then(fn).catch(writeErr);
+    return chains[id];
+  }
+  function stamp(p) { p.updatedAt = new Date().toISOString(); if (me) p.updatedBy = me; return p; }
+  function update(id, patch) { if (!db) return; return queue(id, () => db.collection("items").doc(id).update(stamp(patch))); }
+
+  function commitCount(id) {
+    const it = state.items.find((x) => x.id === id);
+    const v = state.pending[id];
+    if (!it || v == null) return;
+    const patch = batchPatch(batchesForTotal(it, v), it);
+    update(id, patch).then(() => { if (state.pending[id] === v) delete state.pending[id]; render(); });
+  }
+  function bump(id, d) {
+    const it = state.items.find((x) => x.id === id); if (!it) return;
+    state.pending[id] = Math.max(0, onHand(it) + d);
+    const inp = document.getElementById("c-" + id); if (inp) inp.value = state.pending[id];
+    clearTimeout(timers[id]); timers[id] = setTimeout(() => commitCount(id), 700);
+    renderStats();
+  }
+
+  function itemFrom(o) {
+    return stamp({
+      name: o.name.trim(), barcode: bc(o.barcode), supplier: (o.supplier || "").trim(), type: (o.type || "").trim(),
+      ...batchPatch(num(o.onHand, 0) > 0 ? [{ exp: o.expiry || "", qty: num(o.onHand, 0) }] : [], { expiry: o.expiry || "" }),
+      min: num(o.min, 0), reorderQty: num(o.reorderQty, 0), price: price(o.price), description: (o.description || "").trim(), ingredients: (o.ingredients || "").trim(), onOrder: false, createdAt: new Date().toISOString(),
+    });
+  }
+
+  function parseBulk(text) {
+    return text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
+      .map((l) => l.split(/\t|,|;/).map((x) => x.trim()))
+      .filter((p) => p[0] && !/^(item\s*)?name$/i.test(p[0]))
+      .map((p) => ({ name: p[0], supplier: p[1], onHand: p[2], min: p[3], reorderQty: p[4], barcode: p[5], type: p[6] }));
+  }
+  function bc(v) { return String(v == null ? "" : v).replace(/\s+/g, ""); }
+  function barcodeTaken(code, exceptId) {
+    const c = bc(code); if (!c) return null;
+    return state.items.find((x) => x.id !== exceptId && bc(x.barcode) === c) || null;
+  }
+
+  // ---------- events ----------
+  document.addEventListener("click", async (ev) => {
+    const b = ev.target.closest("[data-act]"); if (!b) return;
+    const act = b.dataset.act, id = b.dataset.id;
+    if (act === "inc") bump(id, 1);
+    else if (act === "dec") bump(id, -1);
+    else if (act === "filter") { state.filter = b.dataset.f; render(); }
+    else if (act === "jump") {
+      const f = b.dataset.f;
+      state.tab = f === "need" ? "order" : f === "exp" ? "exp" : "stock";
+      if (state.tab === "stock") state.filter = f;
+      saveTab(); render();
+    }
+    else if (act === "qopen") { openQuick(); }
+    else if (act === "qclose") { closeQuick(); }
+    else if (act === "qadd") {
+      const it = state.items.find((x) => x.id === id);
+      if (it) { addToCart(it, true); renderQuick(); toast(`Added ${it.name}`); }
+    }
+    else if (act === "qpin") { setQuick(id, !isQuick(id)); renderQuick(); }
+    else if (act === "mode") { till.mode = b.dataset.m; till.confirmRefund = null; saveCart(); renderTill(); $("#cq").focus(); }
+    else if (act === "cadd") { const it = state.items.find((x) => x.id === id); if (it) addToCart(it); }
+    else if (act === "cinc" || act === "cdec") { const l = till.cart[+b.dataset.i]; if (l) { l.qty = Math.max(1, l.qty + (act === "cinc" ? 1 : -1)); saveCart(); renderTill(); } }
+    else if (act === "crem") { till.cart.splice(+b.dataset.i, 1); saveCart(); renderTill(); }
+    else if (act === "cclear") { till.cart = []; saveCart(); renderTill(); }
+    else if (act === "ccheckout") { checkout(); }
+    else if (act === "dtype") { till.disc.type = b.dataset.t; saveCart(); renderCart(); const d = $("#discv"); if (d) d.focus(); }
+    else if (act === "dclear") { till.disc.value = ""; saveCart(); renderCart(); }
+    else if (act === "askrefund") { till.confirmRefund = b.dataset.k; renderSales(); }
+    else if (act === "dorefund") { refundLine(b.dataset.s, +b.dataset.j); }
+    else if (act === "rensup") { state.renamingSup = b.dataset.s; renderChips(); }
+    else if (act === "norename") { state.renamingSup = null; document.activeElement && document.activeElement.blur(); renderChips(); }
+    else if (act === "delsup") {
+      const s = b.dataset.s;
+      state.savedSuppliers = state.savedSuppliers.filter((x) => x !== s);
+      if (state.supplier === s) state.supplier = "";
+      saveSettings(); renderChips(); toast("Removed " + s);
+    }
+    else if (act === "deltype") {
+      const t = b.dataset.t;
+      state.savedTypes = state.savedTypes.filter((x) => x !== t);
+      saveTypes(state.savedTypes); renderChips(); toast("Removed " + t);
+    }
+    else if (act === "addbatch") {
+      const box = document.querySelector(`[data-batches="${CSS.escape(id)}"]`);
+      if (box) { box.insertAdjacentHTML("beforeend", batchRowHtml(null)); const r = box.lastElementChild; if (r) r.querySelector(".bexp").focus(); }
+    }
+    else if (act === "rmbatch") { const r = b.closest(".brow"); if (r) r.remove(); }
+    else if (act === "askwo") { state.confirmWo = b.dataset.k; renderExpiry(); }
+    else if (act === "nowo") { state.confirmWo = null; renderExpiry(); }
+    else if (act === "dowo") {
+      const [iid, ex] = b.dataset.k.split("|");
+      const it = state.items.find((x) => x.id === iid);
+      if (it) {
+        const bs = getBatches(it), gone = bs.filter((x) => x.exp === ex).reduce((t, x) => t + x.qty, 0);
+        update(iid, batchPatch(bs.filter((x) => x.exp !== ex), it));
+        toast(`${gone} × ${it.name} removed from stock`);
+      }
+      state.confirmWo = null;
+    }
+    else if (act === "tab") { state.tab = b.dataset.t; saveTab(); render(); if (state.tab === "hist") openHist(); }
+    else if (act === "hp") { hist.preset = b.dataset.p; subscribeHist(); }
+    else if (act === "hdl") { downloadHist(); }
+    else if (act === "askhrefund") { hist.confirm = b.dataset.k; renderHist(); }
+    else if (act === "dohrefund") { refundLine(b.dataset.s, +b.dataset.j); }
+    else if (act === "edit") { state.editing = state.editing === id ? null : id; state.confirmDel = null; render(); }
+    else if (act === "cancel") { state.editing = null; state.confirmDel = null; render(); }
+    else if (act === "askdel") { state.confirmDel = id; render(); }
+    else if (act === "nodel") { state.confirmDel = null; render(); }
+    else if (act === "del") {
+      state.editing = null; state.confirmDel = null;
+      queue(id, () => db.collection("items").doc(id).delete()).then(() => toast("Item removed"));
+      render();
+    }
+    else if (act === "ordered") { update(id, { onOrder: true, orderedAt: new Date().toISOString() }); toast("Marked as ordered"); }
+    else if (act === "unorder") { update(id, { onOrder: false, orderedAt: null }); }
+    else if (act === "copy") {
+      const sup = b.dataset.sup;
+      const list = state.items.filter((it) => ((it.supplier || "").trim() || "No supplier set") === sup && (status(it) === "low" || status(it) === "out"))
+        .sort((x, y) => String(x.name).localeCompare(String(y.name)));
+      const text = orderText(sup, list);
+      try { await navigator.clipboard.writeText(text); toast("Order copied. Paste it into your email or message."); state.copyOpen = null; }
+      catch (e) { state.copyOpen = sup; renderOrders(); const box = $("#copybox"); if (box) { box.focus(); box.select(); } toast("Select the text below and copy it."); }
+    }
+  });
+
+  document.querySelector(".tabs").addEventListener("click", (ev) => {
+    const b = ev.target.closest("[data-tab]"); if (!b) return;
+    state.tab = b.dataset.tab; state.copyOpen = null; saveTab(); render();
+    if (state.tab === "hist") openHist();
+  });
+  function saveTab() { try { localStorage.setItem("stockroom.tab", state.tab); } catch (e) {} }
+
+  $("#q").addEventListener("input", (e) => { state.q = e.target.value; renderList(); });
+  // A barcode scanner types the number then presses Enter: jump straight to that item's count.
+  $("#q").addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    const code = bc(state.q);
+    const exact = code && state.items.find((x) => bc(x.barcode) === code);
+    const inputs = document.querySelectorAll("#list [data-count]");
+    const target = exact ? document.getElementById("c-" + exact.id) : (inputs.length === 1 ? inputs[0] : null);
+    if (target) { target.focus(); target.select(); }
+    else if (code && /^\d{6,}$/.test(code) && !exact) toast("No item has barcode " + code + ". Add it under Add items.");
+  });
+  document.addEventListener("change", (e) => {
+    const t = e.target;
+    if (t.id === "supSel") { state.supplier = t.value; renderList(); return; }
+    if (t.id === "typeSel") { state.type = t.value; renderList(); return; }
+    if (t.id === "groupSel") { state.group = t.value; try { localStorage.setItem("stockroom.group", state.group); } catch (e) {} renderList(); return; }
+    if (t.dataset.count) {
+      const id = t.dataset.count; clearTimeout(timers[id]);
+      state.pending[id] = num(t.value, 0); t.value = state.pending[id]; commitCount(id); renderStats();
+    }
+    if (t.dataset.exp) {
+      const [iid, ex] = t.dataset.exp.split("|");
+      const it = state.items.find((x) => x.id === iid);
+      if (it) {
+        const bs = getBatches(it).map((x) => x.exp === ex ? { exp: t.value || "", qty: x.qty } : x);
+        update(iid, batchPatch(bs, it));
+        toast(t.value ? "Batch date changed to " + fmtDate(t.value) : "Batch date removed");
+      }
+      t.blur(); return;
+    }
+    if (t.dataset.oq) { state.ordQty[t.dataset.oq] = Math.max(1, num(t.value, 1)); }
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.dataset && e.target.dataset.count) e.target.blur(); });
+  document.addEventListener("focusout", () => { setTimeout(() => { if (state.listDirty) renderList(); }, 0); });
+
+  document.addEventListener("submit", (e) => {
+    const f = e.target.closest("form[data-edit]"); if (!f) return;
+    function editedBatches(form, itemId) {
+      const it = state.items.find((x) => x.id === itemId) || {};
+      const rows = Array.from(form.querySelectorAll(".brow")).map((r) => ({ exp: r.querySelector(".bexp").value, qty: num(r.querySelector(".bqty").value, 0) }));
+      delete state.pending[itemId];
+      return batchPatch(rows, it);
+    }
+    e.preventDefault();
+    const id = f.dataset.edit, g = (n) => f.elements[n].value;
+    if (!g("name").trim()) { toast("Give the item a name."); return; }
+    const dup = barcodeTaken(g("barcode"), id);
+    if (dup) { toast("That barcode is already on " + (dup.name || "another item")); return; }
+    update(id, { name: g("name").trim(), barcode: bc(g("barcode")), supplier: g("supplier").trim(), type: g("type").trim(), min: num(g("min"), 0), reorderQty: num(g("reorderQty"), 0), price: price(g("price")), ...editedBatches(f, id), description: g("description").trim(), ingredients: g("ingredients").trim() });
+    const wantQuick = f.elements["quick"] && f.elements["quick"].checked;
+    if (wantQuick !== isQuick(id)) setQuick(id, wantQuick);
+    state.editing = null; f.remove(); render(); toast("Saved");
+  });
+
+  $("#addForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!db) { toast("Open this page on claude.ai while signed in to add items."); return; }
+    const name = $("#a-name").value;
+    if (!name.trim()) { toast("Give the item a name."); $("#a-name").focus(); return; }
+    const dup = barcodeTaken($("#a-bc").value);
+    if (dup) { toast("That barcode is already on " + (dup.name || "another item")); $("#a-bc").focus(); return; }
+    try {
+      await db.collection("items").add(itemFrom({ name, barcode: $("#a-bc").value, supplier: $("#a-supplier").value, type: $("#a-type").value, onHand: $("#a-on").value, min: $("#a-min").value, reorderQty: $("#a-rq").value, price: $("#a-price").value, expiry: $("#a-exp").value, description: $("#a-desc").value, ingredients: $("#a-ing").value }));
+      toast("Added " + name.trim());
+      $("#a-name").value = ""; $("#a-bc").value = ""; $("#a-price").value = ""; $("#a-exp").value = ""; $("#a-desc").value = ""; $("#a-ing").value = ""; $("#a-on").value = "0"; $("#a-rq").value = ""; $("#a-name").focus();
+    } catch (err) { writeErr(err); }
+  });
+
+  $("#supForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!db) { toast("Open this page on claude.ai while signed in to add suppliers."); return; }
+    const s = $("#s-new").value.trim();
+    if (!s) { $("#s-new").focus(); return; }
+    if (suppliers().some((x) => x.toLowerCase() === s.toLowerCase())) { toast(s + " is already on the list"); return; }
+    state.savedSuppliers = state.savedSuppliers.concat([s]);
+    saveSettings(); $("#s-new").value = ""; renderChips(); toast("Added " + s);
+  });
+  $("#supChips").addEventListener("submit", async (e) => {
+    const f = e.target.closest("form[data-rename]"); if (!f) return;
+    e.preventDefault();
+    const from = f.dataset.rename, to = $("#rn-sup").value.trim();
+    state.renamingSup = null;
+    if (!to || to === from) { document.activeElement.blur(); renderChips(); return; }
+    const clash = suppliers().find((x) => x !== from && x.toLowerCase() === to.toLowerCase());
+    const target = clash || to;
+    state.savedSuppliers = state.savedSuppliers.filter((x) => x !== from && x !== target).concat([target]);
+    if (state.supplier === from) state.supplier = target;
+    document.activeElement.blur();
+    saveSettings();
+    const affected = state.items.filter((it) => (it.supplier || "").trim() === from);
+    for (const it of affected) await update(it.id, { supplier: target });
+    renderChips(); render();
+    toast(clash ? `Merged ${from} into ${target}` : `Renamed to ${target}` + (affected.length ? ` on ${affected.length} item${affected.length === 1 ? "" : "s"}` : ""));
+  });
+
+  $("#typeForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!db) { toast("Open this page on claude.ai while signed in to add types."); return; }
+    const t = $("#t-new").value.trim();
+    if (!t) { $("#t-new").focus(); return; }
+    if (productTypes().some((x) => x.toLowerCase() === t.toLowerCase())) { toast(t + " is already a type"); return; }
+    state.savedTypes = state.savedTypes.concat([t]);
+    saveTypes(state.savedTypes); $("#t-new").value = ""; renderChips(); toast("Added " + t);
+  });
+
+  $("#bulk").addEventListener("input", () => {
+    const n = parseBulk($("#bulk").value).length;
+    $("#bulkHint").textContent = n ? `${n} item${n === 1 ? "" : "s"} ready to add` : "Nothing pasted yet";
+    $("#bulkAdd").disabled = !n;
+    $("#bulkAdd").textContent = n ? `Add ${n} item${n === 1 ? "" : "s"}` : "Add items";
+  });
+  $("#bulkAdd").addEventListener("click", async () => {
+    if (!db) { toast("Open this page on claude.ai while signed in to add items."); return; }
+    const rows = parseBulk($("#bulk").value); if (!rows.length) return;
+    const btn = $("#bulkAdd"); btn.disabled = true;
+    let ok = 0;
+    for (const r of rows) {
+      try { await db.collection("items").add(itemFrom(r)); ok++; btn.textContent = `Adding… ${ok}/${rows.length}`; }
+      catch (err) { writeErr(err); break; }
+    }
+    if (ok) { toast(`Added ${ok} item${ok === 1 ? "" : "s"}`); $("#bulk").value = ""; }
+    $("#bulk").dispatchEvent(new Event("input"));
+  });
+
+  // ---------- cashout ----------
+  const till = { mode: "sale", cart: [], q: "", sales: [], busy: false, confirmRefund: null, disc: { type: "pct", value: "" } };
+  try {
+    const c = JSON.parse(sessionStorage.getItem("stockroom.cart") || "null");
+    if (c && Array.isArray(c.cart)) { till.cart = c.cart; till.mode = c.mode === "refund" ? "refund" : "sale"; }
+    if (c && c.disc && (c.disc.type === "pct" || c.disc.type === "eur")) till.disc = { type: c.disc.type, value: String(c.disc.value || "") };
+  } catch (e) {}
+  function saveCart() { try { sessionStorage.setItem("stockroom.cart", JSON.stringify({ cart: till.cart, mode: till.mode, disc: till.disc })); } catch (e) {} }
+  function subtotal() { return cents(till.cart.reduce((s, l) => s + (l.price || 0) * l.qty, 0)); }
+  function discountAmount(sub) {
+    if (till.mode === "refund") return 0;
+    const v = parseFloat(String(till.disc.value).replace(",", "."));
+    if (!Number.isFinite(v) || v <= 0) return 0;
+    return cents(till.disc.type === "pct" ? sub * Math.min(v, 100) / 100 : Math.min(v, sub));
+  }
+  function discLabel() {
+    const v = parseFloat(String(till.disc.value).replace(",", "."));
+    if (!Number.isFinite(v) || v <= 0) return "";
+    return till.disc.type === "pct" ? `${+Math.min(v, 100).toFixed(2)}% off` : `${eur(v)} off`;
+  }
+  function saleRatio(s) { const sub = Number(s.subtotal); return sub > 0 ? (Number(s.total) || 0) / sub : 1; }
+  const cents = (n) => Math.round((Number(n) || 0) * 100) / 100;
+  function cartTotal() { const s = subtotal(); return cents(s - discountAmount(s)); }
+  function todayKey(d) { const x = d ? new Date(d) : new Date(); return x.getFullYear() + "-" + String(x.getMonth() + 1).padStart(2, "0") + "-" + String(x.getDate()).padStart(2, "0"); }
+
+  function addToCart(it, fromMenu) {
+    const l = till.cart.find((x) => x.id === it.id);
+    if (l) l.qty += 1;
+    else till.cart.push({ id: it.id, name: it.name || "Unnamed item", qty: 1, price: price(it.price) });
+    till.q = ""; $("#cq").value = ""; saveCart(); renderTill();
+    if (!fromMenu) $("#cq").focus();
+  }
+
+  function renderTill() {
+    $("#tab-cash .till").classList.toggle("refund", till.mode === "refund");
+    document.querySelectorAll(".mode").forEach((b) => b.setAttribute("aria-checked", String(b.dataset.m === till.mode)));
+    const n = till.cart.reduce((s, l) => s + l.qty, 0);
+    $("#cartBadge").textContent = n ? String(n) : "";
+    renderResults(); renderCart(); renderSales();
+  }
+
+  function renderResults() {
+    const el = $("#cresults"), q = till.q.trim().toLowerCase();
+    if (!q) { el.innerHTML = ""; return; }
+    const qd = q.replace(/\s+/g, "");
+    const hits = state.items.filter((it) => String(it.name || "").toLowerCase().includes(q) || (qd && bc(it.barcode).includes(qd)) || String(it.description || "").toLowerCase().includes(q) || String(it.ingredients || "").toLowerCase().includes(q))
+      .sort((a, b) => String(a.name).localeCompare(String(b.name))).slice(0, 8);
+    el.innerHTML = hits.length ? hits.map((it) => {
+      const pr = price(it.price);
+      return `<button type="button" class="cres" data-act="cadd" data-id="${esc(it.id)}">
+        <span><span class="name">${esc(it.name)}</span><span class="meta">${onHand(it)} on shelf${it.barcode ? ` · <span class="code">${esc(it.barcode)}</span>` : ""}</span></span>
+        <b>${pr != null ? eur(pr) : "No price"}</b></button>`;
+    }).join("") : `<p class="hint">No product matches "${esc(till.q.trim())}".</p>`;
+  }
+
+  function renderCart() {
+    const el = $("#cart");
+    const a = document.activeElement;
+    if (a && el.contains(a) && a.tagName === "INPUT") return;
+    const refund = till.mode === "refund";
+    if (!till.cart.length) {
+      el.innerHTML = `<div class="empty"><h2>${refund ? "Nothing to return yet" : "Basket is empty"}</h2><p>${refund
+        ? "Add the items the customer is returning. They go back into stock when you confirm. To refund a sale from today, use Refund next to it in Today's sales."
+        : "Scan a barcode or type a product name above, then tap the product to add it. Stock comes off the shelf when you complete the sale."}</p></div>`;
+      return;
+    }
+    const sub = subtotal(), damt = discountAmount(sub), total = cartTotal(), noPrice = till.cart.some((l) => l.price == null);
+    const discRow = refund ? "" : `<div class="cdisc">
+        <span class="dl">Discount</span>
+        <div class="seg" role="radiogroup" aria-label="Discount type">
+          <button type="button" data-act="dtype" data-t="pct" role="radio" aria-checked="${till.disc.type === "pct"}">%</button>
+          <button type="button" data-act="dtype" data-t="eur" role="radio" aria-checked="${till.disc.type === "eur"}">€</button>
+        </div>
+        <input id="discv" type="number" min="0" step="${till.disc.type === "pct" ? "1" : "0.01"}" inputmode="decimal" value="${esc(till.disc.value)}" placeholder="${till.disc.type === "pct" ? "e.g. 10" : "e.g. 2.00"}" aria-label="Discount ${till.disc.type === "pct" ? "percentage" : "amount in euro"}">
+        <span class="damt" id="damt">${damt ? "−" + eur(damt) : ""}</span>
+        ${till.disc.value !== "" ? `<button type="button" class="xbtn" data-act="dclear" aria-label="Remove discount" title="Remove discount">×</button>` : ""}
+      </div>`;
+    el.innerHTML = `<div class="cartbox">${till.cart.map((l, i) => {
+      const it = state.items.find((x) => x.id === l.id);
+      const have = it ? onHand(it) : 0;
+      const warn = !it ? "This item was removed from stock." : !refund && l.qty > have ? `Only ${have} on shelf. Stock will go to 0.` : "";
+      return `<div class="cline">
+        <div class="nm name">${esc(l.name)}</div>
+        <div class="stepper">
+          <button type="button" data-act="cdec" data-i="${i}" aria-label="One less ${esc(l.name)}">−</button>
+          <input id="cl-q-${i}" type="number" min="1" inputmode="numeric" value="${l.qty}" data-cq="${i}" aria-label="Quantity of ${esc(l.name)}">
+          <button type="button" data-act="cinc" data-i="${i}" aria-label="One more ${esc(l.name)}">+</button>
+        </div>
+        <label class="pr" for="cl-p-${i}">€<input id="cl-p-${i}" type="number" min="0" step="0.01" inputmode="decimal" value="${l.price != null ? l.price.toFixed(2) : ""}" placeholder="0.00" data-cp="${i}"></label>
+        <div class="lt">${eur(cents((l.price || 0) * l.qty))}<button type="button" class="xbtn" data-act="crem" data-i="${i}" aria-label="Remove ${esc(l.name)}" title="Remove">×</button></div>
+        ${warn ? `<div class="warnline">${warn}</div>` : ""}
+      </div>`;
+    }).join("")}
+      ${discRow}
+      <div class="ctotal">
+        <div class="sum"><small id="csubl">${refund ? "To refund" : damt ? `Subtotal ${eur(sub)} · ${discLabel()}` : "Total"}${noPrice ? " · some items have no price" : ""}</small><span id="ctot">${eur(total)}</span></div>
+        <div class="actions">
+          <button type="button" class="ghost" data-act="cclear">Clear</button>
+          <button type="button" class="primary big" data-act="ccheckout" ${till.busy ? "disabled" : ""}>${refund ? "Return to stock" : "Complete sale"}</button>
+        </div>
+      </div></div>`;
+  }
+
+  function renderSales() {
+    const el = $("#sales");
+    const today = todayKey();
+    const list = till.sales.filter((s) => s.day === today).sort((a, b) => String(b.at).localeCompare(String(a.at)));
+    if (!db) { el.innerHTML = `<p class="hint">Sales show here once the page is connected.</p>`; return; }
+    if (!list.length) { el.innerHTML = `<p class="hint">No sales yet today. Completed sales and refunds appear here.</p>`; return; }
+    let net = 0;
+    const html = list.map((s) => {
+      const isRefund = s.kind === "refund";
+      const lines = Array.isArray(s.lines) ? s.lines : [];
+      const t = new Date(s.at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+      const w = who(s.by);
+      const ratio = saleRatio(s);
+      net += isRefund ? -(Number(s.total) || 0) : (Number(s.total) || 0) - lines.reduce((x, l) => x + (Number(l.refunded) || 0) * (Number(l.price) || 0) * ratio, 0);
+      return `<div class="sale${isRefund ? " is-refund" : ""}">
+        <div class="sh"><span>${t}${isRefund ? " · Return" : ""}${s.discount && s.discount.amount ? ` · <span class="dtag">${esc(s.discount.label || "Discount")}</span>` : ""}${w ? " · " + esc(w) : ""}</span><b>${isRefund ? "−" : ""}${eur(Number(s.total) || 0)}</b></div>
+        ${lines.map((l, j) => {
+          const left = (Number(l.qty) || 0) - (Number(l.refunded) || 0);
+          const key = s.id + ":" + j;
+          let ctl = "";
+          if (!isRefund) {
+            if (left <= 0) ctl = `<span class="done">Refunded</span>`;
+            else if (till.confirmRefund === key) ctl = `<button type="button" class="danger" data-act="dorefund" data-s="${esc(s.id)}" data-j="${j}">Refund ${left} · ${eur(cents(left * (Number(l.price) || 0) * saleRatio(s)))}?</button>`;
+            else ctl = `<button type="button" class="ghost" data-act="askrefund" data-k="${esc(key)}">Refund</button>`;
+          }
+          return `<div class="sl"><span>${Number(l.qty) || 0} × ${esc(l.name)}${l.refunded ? ` <span class="done">(${l.refunded} back)</span>` : ""}</span>${ctl}</div>`;
+        }).join("")}
+      </div>`;
+    }).join("");
+    el.innerHTML = html + `<div class="daytotal"><span>Takings today</span><b>${eur(cents(net))}</b></div>`;
+  }
+
+  async function checkout() {
+    if (!db) { toast("Open this page on claude.ai while signed in to record sales."); return; }
+    if (!till.cart.length || till.busy) return;
+    const refund = till.mode === "refund";
+    till.busy = true; renderCart();
+    const lines = till.cart.map((l) => ({ id: l.id, name: l.name, qty: l.qty, price: l.price != null ? l.price : 0, refunded: 0 }));
+    const total = cartTotal();
+    try {
+      for (const l of lines) {
+        const it = state.items.find((x) => x.id === l.id);
+        if (!it) continue;
+        let bs;
+        if (refund) {
+          // returned stock goes back to the soonest-expiring batch still on the shelf
+          bs = tidyBatches(getBatches(it));
+          if (bs.length) bs[0].qty += l.qty; else bs = [{ exp: validExp(it.expiry), qty: l.qty }];
+        } else {
+          const r = takeFEFO(getBatches(it), l.qty); bs = r[0]; l.fromBatches = r[1];
+        }
+        const patch = batchPatch(bs, it), next = patch.onHand;
+        state.pending[it.id] = next;
+        await update(it.id, patch);
+        if (state.pending[it.id] === next) delete state.pending[it.id];
+      }
+      const sub = subtotal(), damt = discountAmount(sub);
+      const rec = { kind: refund ? "refund" : "sale", at: new Date().toISOString(), day: todayKey(), lines, subtotal: sub, total };
+      if (damt) rec.discount = { type: till.disc.type, value: parseFloat(String(till.disc.value).replace(",", ".")), amount: damt, label: discLabel() };
+      if (me) rec.by = me;
+      await db.collection("sales").add(rec);
+      till.cart = []; till.disc = { type: till.disc.type, value: "" }; saveCart();
+      toast(refund ? "Returned to stock" : `Sale complete · ${eur(total)}${damt ? ` (${eur(damt)} discount)` : ""}`);
+    } catch (err) { writeErr(err); }
+    till.busy = false; render(); renderTill();
+  }
+
+  async function refundLine(saleId, j) {
+    const s = till.sales.find((x) => x.id === saleId) || hist.sales.find((x) => x.id === saleId);
+    if (!s || !db) return;
+    const lines = (s.lines || []).map((l) => Object.assign({}, l));
+    const l = lines[j]; if (!l) return;
+    const left = (Number(l.qty) || 0) - (Number(l.refunded) || 0);
+    if (left <= 0) return;
+    try {
+      const it = state.items.find((x) => x.id === l.id);
+      if (it) {
+        // put units back into the batches they were sold from
+        let bs = getBatches(it), back = left;
+        (Array.isArray(l.fromBatches) ? l.fromBatches : []).forEach((fb) => { const t = Math.min(num(fb.qty, 0), back); if (t > 0) { bs.push({ exp: validExp(fb.exp), qty: t }); back -= t; } });
+        if (back > 0) { const t = tidyBatches(bs); if (t.length) t[0].qty += back; else t.push({ exp: validExp(it.expiry), qty: back }); bs = t; }
+        const patch = batchPatch(bs, it), next = patch.onHand;
+        state.pending[it.id] = next;
+        await update(it.id, patch);
+        if (state.pending[it.id] === next) delete state.pending[it.id];
+      }
+      l.refunded = (Number(l.refunded) || 0) + left;
+      await queue("sale-" + saleId, () => db.collection("sales").doc(saleId).update({ lines, refundedAt: new Date().toISOString() }));
+      const back = cents(left * (Number(l.price) || 0) * saleRatio(s));
+      toast(`${left} × ${l.name} back in stock · give back ${eur(back)}${it ? "" : " (item no longer in the stock list)"}`);
+    } catch (err) { writeErr(err); }
+    till.confirmRefund = null; hist.confirm = null; render(); renderTill(); renderHist();
+  }
+
+  // ---------- sales history ----------
+  const hist = { preset: "7d", from: "", to: "", q: "", sales: [], unsub: null, confirm: null, loading: false, started: false };
+  const PRESETS = [["today", "Today"], ["yday", "Yesterday"], ["7d", "Last 7 days"], ["month", "This month"], ["lmonth", "Last month"]];
+  function parseDay(v) { const p = String(v || "").split("-").map(Number); return p.length === 3 && p[0] ? new Date(p[0], p[1] - 1, p[2]) : null; }
+  function histRange() {
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    let a = new Date(t), b = new Date(t); b.setDate(b.getDate() + 1);
+    if (hist.preset === "yday") { a.setDate(a.getDate() - 1); b = new Date(t); }
+    else if (hist.preset === "7d") a.setDate(a.getDate() - 6);
+    else if (hist.preset === "month") a.setDate(1);
+    else if (hist.preset === "lmonth") { a = new Date(t.getFullYear(), t.getMonth() - 1, 1); b = new Date(t.getFullYear(), t.getMonth(), 1); }
+    else if (hist.preset === "custom") {
+      const f = parseDay(hist.from), to = parseDay(hist.to);
+      if (f) a = f;
+      if (to) { b = new Date(to); b.setDate(b.getDate() + 1); }
+      if (b <= a) { b = new Date(a); b.setDate(b.getDate() + 1); }
+    }
+    return [a, b];
+  }
+  function lineValue(s, l, qty) { return (Number(l.price) || 0) * qty * saleRatio(s); }
+  function saleNet(s) {
+    const lines = Array.isArray(s.lines) ? s.lines : [];
+    if (s.kind === "refund") return -(Number(s.total) || 0);
+    return (Number(s.total) || 0) - lines.reduce((x, l) => x + lineValue(s, l, Number(l.refunded) || 0), 0);
+  }
+  function openHist() { if (!hist.started) { hist.started = true; subscribeHist(); } else renderHist(); }
+  function subscribeHist() {
+    const [a, b] = histRange();
+    $("#hfrom").value = todayKey(a);
+    const last = new Date(b); last.setDate(last.getDate() - 1); $("#hto").value = todayKey(last);
+    if (!db) { renderHist(); return; }
+    if (hist.unsub) hist.unsub();
+    hist.loading = true; hist.sales = []; hist.confirm = null; renderHist();
+    hist.unsub = db.collection("sales").where("at", ">=", a.toISOString()).where("at", "<", b.toISOString()).onSnapshot((snap) => {
+      hist.sales = snap.docs.map((d) => Object.assign({ id: d.id }, d.data()));
+      hist.loading = false; renderHist(); resolveNames();
+    }, () => { hist.loading = false; renderHist(); });
+  }
+  function histFiltered() {
+    const q = hist.q.trim().toLowerCase();
+    const list = hist.sales.slice().sort((x, y) => String(y.at).localeCompare(String(x.at)));
+    if (!q) return list;
+    return list.filter((s) => (s.lines || []).some((l) => String(l.name || "").toLowerCase().includes(q)));
+  }
+  function renderHist() {
+    if (!$("#hpresets")) return;
+    $("#hpresets").innerHTML = PRESETS.map(([k, t]) => `<button type="button" class="chip" data-act="hp" data-p="${k}" aria-pressed="${hist.preset === k}">${t}</button>`).join("")
+      + (hist.preset === "custom" ? `<span class="chip" aria-pressed="true">Custom dates</span>` : "");
+    const sumEl = $("#hsum"), el = $("#hlist");
+    if (!db) { sumEl.innerHTML = ""; el.innerHTML = `<div class="empty"><h2>Sales can't load here</h2><p>Open Stock Room where your stock is stored to see past sales.</p></div>`; return; }
+    if (hist.loading) { sumEl.innerHTML = ""; el.innerHTML = `<div class="empty"><h2>Loading sales…</h2></div>`; return; }
+    const q = hist.q.trim().toLowerCase();
+    const list = histFiltered();
+    // summary
+    let takings = 0, nSales = 0, units = 0, disc = 0, refunds = 0;
+    hist.sales.forEach((s) => {
+      const lines = s.lines || [];
+      takings += saleNet(s);
+      if (s.kind === "refund") { refunds += Number(s.total) || 0; return; }
+      nSales++;
+      disc += (s.discount && Number(s.discount.amount)) || 0;
+      lines.forEach((l) => { const r = Number(l.refunded) || 0; units += (Number(l.qty) || 0) - r; refunds += lineValue(s, l, r); });
+    });
+    let prod = "";
+    if (q) {
+      let pu = 0, pv = 0; const names = new Set();
+      hist.sales.forEach((s) => (s.lines || []).forEach((l) => {
+        if (!String(l.name || "").toLowerCase().includes(q)) return;
+        names.add(l.name);
+        const n = (Number(l.qty) || 0) - (Number(l.refunded) || 0);
+        if (s.kind === "refund") { pu -= Number(l.qty) || 0; pv -= lineValue(s, l, Number(l.qty) || 0); }
+        else { pu += n; pv += lineValue(s, l, n); }
+      }));
+      prod = names.size
+        ? `<p class="hprod"><b>${esc([...names].slice(0, 3).join(", "))}${names.size > 3 ? "…" : ""}</b>: ${pu} sold for ${eur(cents(pv))} in this period.</p>`
+        : `<p class="hprod">No sales of "${esc(hist.q.trim())}" in this period.</p>`;
+    }
+    const tile = (v, l, cls = "") => `<div class="stat ${cls}"><b>${v}</b><span>${l}</span></div>`;
+    sumEl.innerHTML = `<div class="hsum">${tile(eur(cents(takings)), "Takings")}${tile(nSales, "Sales")}${tile(units, "Items sold")}${tile(eur(cents(disc)), "Discounts")}${tile(eur(cents(refunds)), "Refunds", "warn")}</div>${prod}`;
+    if (!list.length) {
+      el.innerHTML = `<div class="empty"><h2>No sales</h2><p>${q ? "Nothing matches that product in this period." : "No sales were recorded in this period."}</p></div>`;
+      return;
+    }
+    const days = {};
+    list.forEach((s) => { const k = todayKey(s.at); (days[k] = days[k] || []).push(s); });
+    el.innerHTML = Object.keys(days).sort().reverse().map((k) => {
+      const ds = days[k], net = ds.reduce((x, s) => x + saleNet(s), 0);
+      const label = new Date(k + "T12:00:00").toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+      return `<section class="hday">
+        <div class="ghead"><h3>${label}<small>${ds.length} record${ds.length === 1 ? "" : "s"}</small></h3><span class="val">${eur(cents(net))}</span></div>
+        ${ds.map((s) => {
+          const isRefund = s.kind === "refund", lines = s.lines || [];
+          const t = new Date(s.at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+          const w = who(s.by);
+          return `<div class="hsale${isRefund ? " is-refund" : ""}">
+            <div class="sh"><span>${t}${isRefund ? " · Return" : ""}${s.discount && s.discount.amount ? ` · <span class="dtag">${esc(s.discount.label || "Discount")}</span>` : ""}${w ? " · " + esc(w) : ""}</span><b>${isRefund ? "−" : ""}${eur(Number(s.total) || 0)}</b></div>
+            ${lines.map((l, j) => {
+              const left = (Number(l.qty) || 0) - (Number(l.refunded) || 0);
+              const key = s.id + ":" + j;
+              const hit = q && String(l.name || "").toLowerCase().includes(q);
+              let ctl = "";
+              if (!isRefund) {
+                if (left <= 0) ctl = `<span class="done">Refunded</span>`;
+                else if (hist.confirm === key) ctl = `<button type="button" class="danger" data-act="dohrefund" data-s="${esc(s.id)}" data-j="${j}">Refund ${left} · ${eur(cents(lineValue(s, l, left)))}?</button>`;
+                else ctl = `<button type="button" class="ghost" data-act="askhrefund" data-k="${esc(key)}">Refund</button>`;
+              }
+              return `<div class="sl${hit ? " hit" : ""}"><span>${Number(l.qty) || 0} × ${esc(l.name)} <span class="hp">${eur(Number(l.price) || 0)}</span>${l.refunded ? ` <span class="done">(${l.refunded} back)</span>` : ""}</span>${ctl}</div>`;
+            }).join("")}
+          </div>`;
+        }).join("")}
+      </section>`;
+    }).join("");
+  }
+  function csvCell(v) { const t = String(v == null ? "" : v); return /[",\n;]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; }
+  async function downloadHist() {
+    const [a, b] = histRange();
+    const last = new Date(b); last.setDate(last.getDate() - 1);
+    const rows = [["Date", "Time", "Type", "Staff", "Product", "Qty", "Unit price", "Line total", "Qty refunded", "Sale subtotal", "Discount", "Sale total", "Takings after refunds"]];
+    histFiltered().slice().reverse().forEach((s) => {
+      const d = new Date(s.at), isRefund = s.kind === "refund";
+      (s.lines || []).forEach((l, j) => rows.push([
+        todayKey(s.at), d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }), isRefund ? "Return" : "Sale", (s.by && names[s.by]) || (s.by === me ? "" : who(s.by)) || "",
+        l.name, Number(l.qty) || 0, (Number(l.price) || 0).toFixed(2), ((Number(l.price) || 0) * (Number(l.qty) || 0)).toFixed(2), Number(l.refunded) || 0,
+        j === 0 ? (Number(s.subtotal != null ? s.subtotal : s.total) || 0).toFixed(2) : "",
+        j === 0 && s.discount && s.discount.amount ? Number(s.discount.amount).toFixed(2) : "",
+        j === 0 ? (isRefund ? "-" : "") + (Number(s.total) || 0).toFixed(2) : "",
+        j === 0 ? cents(saleNet(s)).toFixed(2) : "",
+      ]));
+    });
+    if (rows.length === 1) { toast("No sales in this period to download."); return; }
+    const csv = "\ufeff" + rows.map((r) => r.map(csvCell).join(",")).join("\r\n");
+    const name = `stockroom-sales-${todayKey(a)}-to-${todayKey(last)}.csv`;
+    if (window.STOCKROOM_LOCAL) {
+      const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+      const link = document.createElement("a"); link.href = url; link.download = name; document.body.append(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 3000);
+      toast("Spreadsheet saved to your Downloads folder");
+      return;
+    }
+    if (!dls) { toast("Downloads aren't available in this view. Try a computer browser."); return; }
+    try { await dls.save({ filename: name, data: csv }); toast("Spreadsheet saved"); }
+    catch (e) { if (!(e && e.code === "declined")) toast("The spreadsheet couldn't be saved here."); }
+  }
+  $("#hq").addEventListener("input", (e) => { hist.q = e.target.value; renderHist(); });
+  ["hfrom", "hto"].forEach((id) => $("#" + id).addEventListener("change", () => {
+    hist.preset = "custom"; hist.from = $("#hfrom").value; hist.to = $("#hto").value; subscribeHist();
+  }));
+
+  $("#cq").addEventListener("input", (e) => { till.q = e.target.value; renderResults(); });
+  $("#cq").addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    const code = bc(till.q);
+    const exact = code && state.items.find((x) => bc(x.barcode) === code);
+    if (exact) { addToCart(exact); return; }
+    const first = $("#cresults .cres");
+    if (first && $("#cresults").querySelectorAll(".cres").length === 1) { first.click(); return; }
+    if (code && /^\d{6,}$/.test(code)) toast("No item has barcode " + code + ". Add it under Add items first.");
+  });
+  $("#cart").addEventListener("input", (e) => {
+    if (e.target.id !== "discv") return;
+    till.disc.value = e.target.value; saveCart();
+    const sub = subtotal(), damt = discountAmount(sub);
+    $("#damt").textContent = damt ? "−" + eur(damt) : "";
+    $("#ctot").textContent = eur(cartTotal());
+    $("#csubl").textContent = damt ? `Subtotal ${eur(sub)} · ${discLabel()}` : "Total";
+  });
+  $("#cart").addEventListener("change", (e) => {
+    if (e.target.id === "discv") { e.target.blur(); renderCart(); return; }
+    const t = e.target;
+    if (t.dataset.cq != null) { const l = till.cart[+t.dataset.cq]; if (l) { l.qty = Math.max(1, num(t.value, 1)); saveCart(); t.blur(); renderTill(); } }
+    if (t.dataset.cp != null) { const l = till.cart[+t.dataset.cp]; if (l) { l.price = price(t.value); saveCart(); t.blur(); renderTill(); } }
+  });
+  $("#cart").addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.tagName === "INPUT") e.target.blur(); });
+
+  // ---------- quick moving products ----------
+  let qSales = null, qLoading = false;
+  function isQuick(id) { return state.quick.includes(id); }
+  function setQuick(id, on) {
+    state.quick = on ? state.quick.filter((x) => x !== id).concat([id]) : state.quick.filter((x) => x !== id);
+    saveSettings();
+  }
+  async function loadQuickSales() {
+    if (!db || qLoading) return;
+    qLoading = true;
+    try {
+      const since = new Date(); since.setDate(since.getDate() - 30);
+      const snap = await db.collection("sales").where("at", ">=", since.toISOString()).get();
+      const units = {};
+      snap.docs.forEach((d) => {
+        const s = d.data(); if (!s || s.kind === "refund") return;
+        (s.lines || []).forEach((l) => { const n = (Number(l.qty) || 0) - (Number(l.refunded) || 0); if (n > 0 && l.id) units[l.id] = (units[l.id] || 0) + n; });
+      });
+      qSales = units;
+    } catch (e) { qSales = qSales || {}; }
+    qLoading = false;
+    if (!$("#qmenu").hidden) renderQuick();
+  }
+  function quickList() {
+    const byId = Object.fromEntries(state.items.map((it) => [it.id, it]));
+    const pinned = state.quick.map((id) => byId[id]).filter(Boolean);
+    const sold = Object.entries(qSales || {}).filter(([id]) => byId[id] && !isQuick(id)).sort((a, b) => b[1] - a[1]).slice(0, 24).map(([id, n]) => Object.assign({ _sold: n }, byId[id]));
+    return { pinned, sold };
+  }
+  function renderQuick() {
+    const { pinned, sold } = quickList();
+    const inCart = Object.fromEntries(till.cart.map((l) => [l.id, l.qty]));
+    const tile = (it) => {
+      const pr = price(it.price), id = esc(it.id), have = onHand(it), n = inCart[it.id];
+      return `<div class="qtile${have <= 0 ? " none" : ""}">
+        <button type="button" class="qadd" data-act="qadd" data-id="${id}">
+          <span class="qname">${esc(it.name)}</span>
+          <span class="qmeta"><b>${pr != null ? eur(pr) : "No price"}</b> · ${have} on shelf${it._sold ? ` · ${it._sold} sold` : ""}</span>
+          ${n ? `<span class="qin">${n} in basket</span>` : ""}
+        </button>
+        <button type="button" class="qstar${isQuick(it.id) ? " on" : ""}" data-act="qpin" data-id="${id}" aria-pressed="${isQuick(it.id)}" aria-label="${isQuick(it.id) ? "Remove from" : "Keep on"} Quick Moving Products" title="${isQuick(it.id) ? "Remove from list" : "Keep on list"}">★</button>
+      </div>`;
+    };
+    let html = "";
+    if (pinned.length) html += `<h3 class="qsec">Pinned</h3><div class="qtiles">${pinned.map(tile).join("")}</div>`;
+    if (sold.length) html += `<h3 class="qsec">Best sellers · last 30 days</h3><div class="qtiles">${sold.map(tile).join("")}</div>`;
+    if (!html) html = qSales == null
+      ? `<p class="hint">Loading…</p>`
+      : `<div class="empty"><h2>No quick products yet</h2><p>Products appear here automatically once they've been sold through Cashout. To add one now, open it under Stock › Edit and tick "Show in Quick Moving Products".</p></div>`;
+    $("#qgrid").innerHTML = html;
+  }
+  function openQuick() { $("#qmenu").hidden = false; renderQuick(); loadQuickSales(); const b = $("#qmenu [data-act=qclose]"); if (b) b.focus(); }
+  function closeQuick() { $("#qmenu").hidden = true; $("#cq").focus(); }
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#qmenu").hidden) closeQuick(); });
+  $("#qmenu").addEventListener("click", (e) => { if (e.target.id === "qmenu") closeQuick(); });
+
+  // ---------- invoice scanner ----------
+  let sample = null, scanCtl = null, scanTimer = null, scanMax = 5, scanLines = [], scanSupplier = "";
+  let scanImgs = [], scanReady = false, scanWhy = "";
+  const scanFile = $("#scanFile");
+  const NO_SCAN = "Invoice reading isn't available in this view. Open Stock Room at claude.ai in Chrome, Safari or Edge while signed in. If it still doesn't work, send the invoice photo to Claude in chat and it will add the items for you.";
+
+  function scanNote(t) { const n = $("#scanNote"); n.textContent = t || ""; n.hidden = !t; }
+  async function initScan() {
+    try { sample = window.claude && window.claude.use ? await window.claude.use("sample") : null; } catch (e) { sample = null; }
+    if (!sample) { scanWhy = NO_SCAN; return; }
+    const caps = await sample.limits().catch(() => null);
+    if (!caps || !caps.images) { scanWhy = NO_SCAN; return; }
+    scanMax = caps.images.maxCount || 5;
+    scanReady = true; scanWhy = "";
+  }
+
+  function setScanImages(list) {
+    const imgs = Array.from(list || []).filter((f) => f && /^image\//.test(f.type || "") );
+    if (!imgs.length && list && list.length) { toast("That isn't a photo. Choose a JPEG or PNG image."); return; }
+    scanImgs = imgs.slice(0, scanMax);
+    $("#scanThumbs").innerHTML = "";
+    scanImgs.forEach((f) => { const im = document.createElement("img"); im.alt = "Invoice photo"; try { im.src = URL.createObjectURL(f); } catch (e) {} $("#scanThumbs").append(im); });
+    const n = scanImgs.length;
+    $("#scanFiles").textContent = !n ? "No photo chosen"
+      : (n === 1 ? "1 photo ready" : `${n} photos ready (pages of one invoice)`) + (imgs.length > scanMax ? `. Only the first ${scanMax} will be read.` : "");
+    if (n && !scanReady && scanWhy) scanNote(scanWhy); else scanNote("");
+  }
+  scanFile.addEventListener("change", () => { setScanImages(scanFile.files); scanFile.value = ""; });
+  $("#scanCam").addEventListener("change", (e) => { const f = Array.from(e.target.files || []); setScanImages(scanImgs.concat(f)); e.target.value = ""; });
+  const drop = $("#scanDrop");
+  ["dragenter", "dragover"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
+  drop.addEventListener("drop", (e) => { if (e.dataTransfer && e.dataTransfer.files.length) setScanImages(e.dataTransfer.files); });
+  document.addEventListener("paste", (e) => {
+    if (state.tab !== "add" || !e.clipboardData) return;
+    const files = Array.from(e.clipboardData.files || []).filter((f) => /^image\//.test(f.type));
+    if (files.length) { e.preventDefault(); setScanImages(files); toast("Photo pasted"); }
+  });
+
+  function scanStatus(t) { $("#scanStatus").textContent = t; }
+  function scanBusy(on) {
+    $("#scanGo").disabled = on; $("#scanStop").hidden = !on;
+    clearInterval(scanTimer);
+    if (on) { const t0 = Date.now(); scanStatus("Reading invoice…"); scanTimer = setInterval(() => scanStatus(`Reading invoice… ${Math.round((Date.now() - t0) / 1000)} s`), 1000); }
+  }
+  const SCAN_ERR = {
+    not_granted: "Claude wasn't allowed to read the photo. Reload the page, tap Read invoice again and choose Allow when asked. You can also change this in the page's Permissions menu.",
+    sampling_disabled: "Claude isn't available on this account, so invoices can't be read here.",
+    rate_limited: "Too many requests right now. Wait a minute and try again.",
+    session_expired: "Your Claude session has expired. Sign in again, then retry.",
+    image_rejected: "That photo couldn't be read. Use a JPEG or PNG under 20 MB.",
+    images_unavailable: "Photos can't be sent to Claude from this view.",
+    invalid_json: "Couldn't pick out the product lines. Try a sharper, well-lit photo showing the item rows.",
+    empty_completion: "Couldn't pick out the product lines. Try a sharper, well-lit photo showing the item rows.",
+    refused: "Claude couldn't process this photo. Try a different photo of the invoice.",
+  };
+
+  function scanPrompt() {
+    const list = state.items.slice(0, 600).map((it) => `${it.id} | ${String(it.name || "").slice(0, 80)}`).join("\n") || "(empty)";
+    return [
+      "This is a photo of a supplier invoice delivered to a community pharmacy in Malta. Extract the products that were delivered.",
+      "Rules:",
+      "- One entry per product. If the same product appears on several lines (for example a paid line and a FREE or bonus line), combine them and add the quantities together.",
+      "- name: the product's brand name, strength and form or pack size, as staff would say it, in Title Case. Example: \"CSTN001A100: BAP0126 - CANESTEN 2% THRUSH CREAM\" becomes \"Canesten 2% Thrush Cream\". Leave out supplier codes, lot or serial numbers and expiry text.",
+      "- quantity: total units received, as an integer.",
+      "- price: the consumer or retail selling price per unit INCLUDING VAT, if the invoice has such a column (e.g. 'Cons Inc VAT', 'Retail', 'RRP'). Never use the cost, unit price or net price. Use null if there is no selling price column.",
+      "- expiry: the expiry date as YYYY-MM-DD. If only month and year are given, use the last day of that month. If combined lines have different dates, use the earliest. null if not shown.",
+      "- match: if the product is clearly the same product, strength and pack size as one in the existing stock list below, give that id. Otherwise null. Do not match different strengths or pack sizes.",
+      "- ingredients: for medicines, medical products and supplements, the active ingredient(s) with strengths, e.g. \"Paracetamol 500mg, Caffeine 65mg\", only if you are confident. Empty string for cosmetics, toiletries and anything you are unsure of.",
+      "- supplier: the supplier or wholesaler company named on the invoice, or null.",
+      "- skipped: how many product lines you could not read clearly. Skip unreadable lines rather than guessing.",
+      "",
+      "Existing stock list (id | name):",
+      list,
+      "",
+      'Reply with only JSON in this shape: {"supplier": "AGS Limited", "items": [{"name": "Canesten 2% Thrush Cream", "quantity": 20, "price": 13.98, "expiry": "2029-08-31", "match": null}], "skipped": 0}',
+    ].join("\n");
+  }
+
+  $("#scanStop").addEventListener("click", () => { if (scanCtl) scanCtl.abort(); });
+  $("#scanGo").addEventListener("click", async () => {
+    if (!scanImgs.length) { scanNote("No photo was picked up. Tap Take photo or Choose from photos first. If nothing opens or no preview appears, this view can't pass photos to the page. Send the invoice photo to Claude in chat instead and it will add the items."); return; }
+    if (!scanReady) { scanStatus("Checking…"); await initScan(); scanStatus(""); }
+    if (!scanReady) { scanNote(scanWhy || NO_SCAN); return; }
+    scanNote("");
+    scanCtl = new AbortController();
+    scanBusy(true); $("#scanReview").innerHTML = "";
+    try {
+      const res = await sample.json(scanPrompt(), { images: scanImgs, signal: scanCtl.signal });
+      scanBusy(false);
+      const ids = new Set(state.items.map((i) => i.id));
+      const rows = res && Array.isArray(res.items) ? res.items : [];
+      scanSupplier = res && typeof res.supplier === "string" ? res.supplier.trim() : "";
+      scanLines = rows.filter((r) => r && String(r.name || "").trim()).map((r) => ({
+        include: true,
+        name: String(r.name).trim().slice(0, 120),
+        qty: Math.max(0, Math.round(Number(r.quantity) || 0)),
+        price: price(r.price),
+        expiry: /^\d{4}-\d{2}-\d{2}$/.test(String(r.expiry || "")) ? String(r.expiry) : "",
+        type: $("#scanType").value.trim(),
+        ingredients: String(r.ingredients || "").trim(),
+        match: r.match && ids.has(String(r.match)) ? String(r.match) : "",
+      }));
+      const skipped = Math.max(0, Math.round(Number(res && res.skipped) || 0));
+      if (!scanLines.length) { scanStatus("No product lines found on that photo. Try a clearer photo of the item rows."); return; }
+      if (!$("#scanSup").value.trim() && scanSupplier) {
+        const known = suppliers().find((s) => s.toLowerCase().includes(scanSupplier.toLowerCase().split(/\s+/)[0]) || scanSupplier.toLowerCase().includes(s.toLowerCase().split(/\s+/)[0]));
+        $("#scanSup").value = known || scanSupplier;
+      }
+      scanStatus(`Found ${scanLines.length} product${scanLines.length === 1 ? "" : "s"}${skipped ? `, ${skipped} line${skipped === 1 ? "" : "s"} unreadable` : ""}. Check them below.`);
+      renderScan();
+    } catch (e) {
+      scanBusy(false);
+      const code = e && e.code;
+      scanStatus(code === "cancelled" ? "Stopped." : "");
+      if (code !== "cancelled") scanNote(SCAN_ERR[code] || "Something went wrong reading the invoice. Try again.");
+      if (code === "not_granted" || code === "sampling_disabled" || code === "images_unavailable") { scanReady = false; scanWhy = SCAN_ERR[code]; }
+    }
+  });
+
+  function priceChange(l) {
+    const it = l.match && state.items.find((x) => x.id === l.match);
+    if (!it) return null;
+    const was = price(it.price), now = l.price;
+    if (was == null || now == null || Math.abs(was - now) < 0.005) return { it, was, now, same: true };
+    return { it, was, now, same: false };
+  }
+  function priceNoteHtml(l) {
+    const c = priceChange(l);
+    if (!c) return "";
+    if (c.now == null && c.was != null) return `<span class="pricenote">No selling price on the invoice. It stays at ${eur(c.was)}.</span>`;
+    if (c.same) return "";
+    const pct = c.was > 0 ? Math.round(((c.now - c.was) / c.was) * 100) : null;
+    const up = c.now > c.was;
+    const shelf = onHand(c.it);
+    return `<span class="pricenote ${up ? "up" : "down"}"><b>Price ${up ? "increase" : "decrease"}:</b> ${eur(c.was)} → ${eur(c.now)}${pct != null ? ` (${up ? "+" : ""}${pct}%)` : ""}${shelf > 0 ? `. The ${shelf} already on the shelf will also show the new price.` : ""}</span>`;
+  }
+  function renderScan() {
+    const opts = state.items.slice().sort((a, b) => String(a.name).localeCompare(String(b.name)));
+    const n = scanLines.filter((l) => l.include).length;
+    const changed = scanLines.filter((l) => l.include && (() => { const c = priceChange(l); return c && !c.same; })()).length;
+    $("#scanReview").innerHTML = `<div class="review">
+      <h3>Check before saving${changed ? ` · <span class="pcount">${changed} price change${changed === 1 ? "" : "s"}</span>` : ""}</h3>
+      ${scanLines.map((l, i) => `<div class="sline${l.include ? "" : " off"}">
+        <input type="checkbox" data-sf="include" data-i="${i}" ${l.include ? "checked" : ""} aria-label="Include ${esc(l.name)}">
+        <div class="sfields">
+          <div class="field wide"><label for="sn-${i}">Product</label><input id="sn-${i}" data-sf="name" data-i="${i}" value="${esc(l.name)}"></div>
+          <div class="field"><label for="sq-${i}">Quantity</label><input id="sq-${i}" data-sf="qty" data-i="${i}" type="number" min="0" inputmode="numeric" value="${l.qty}"></div>
+          <div class="field"><label for="sp-${i}">Selling price (€)</label><input id="sp-${i}" data-sf="price" data-i="${i}" type="number" min="0" step="0.01" inputmode="decimal" value="${l.price != null ? l.price.toFixed(2) : ""}"></div>
+          <div class="wide" id="pn-${i}">${priceNoteHtml(l)}</div>
+          <div class="field"><label for="se-${i}">Expiry</label><input id="se-${i}" data-sf="expiry" data-i="${i}" type="date" value="${esc(l.expiry)}"></div>
+          <div class="field"><label for="st-${i}">Product type</label><input id="st-${i}" data-sf="type" data-i="${i}" list="typeList" autocomplete="off" value="${esc(l.type)}"></div>
+          <div class="field wide"><label for="si-${i}">Active ingredient(s)</label><input id="si-${i}" data-sf="ingredients" data-i="${i}" autocomplete="off" placeholder="Leave blank for cosmetics and toiletries" value="${esc(l.ingredients || "")}"></div>
+          <div class="field wide"><label for="sm-${i}">Save as</label>
+            <select id="sm-${i}" data-sf="match" data-i="${i}">
+              <option value="">New item</option>
+              ${opts.map((it) => `<option value="${esc(it.id)}"${it.id === l.match ? " selected" : ""}>Add to existing: ${esc(it.name)} (${onHand(it)} on shelf)</option>`).join("")}
+            </select>
+            ${l.match ? `<span class="matchnote">Matches an item you already stock: quantity will be added to it.</span>` : ""}
+          </div>
+        </div>
+      </div>`).join("")}
+      <div class="actions">
+        <button class="primary" type="button" id="scanSave" ${n ? "" : "disabled"}>Add ${n} item${n === 1 ? "" : "s"} to stock</button>
+        <button class="ghost" type="button" id="scanClear">Discard</button>
+      </div>
+    </div>`;
+  }
+
+  $("#scanReview").addEventListener("input", (e) => {
+    const t = e.target, i = Number(t.dataset.i), f = t.dataset.sf;
+    if (!f || !scanLines[i]) return;
+    const l = scanLines[i];
+    if (f === "name" || f === "type" || f === "ingredients") l[f] = t.value;
+    else if (f === "qty") l.qty = num(t.value, 0);
+    else if (f === "price") { l.price = price(t.value); const pn = document.getElementById("pn-" + i); if (pn) pn.innerHTML = priceNoteHtml(l); }
+    else if (f === "expiry") l.expiry = t.value;
+  });
+  $("#scanReview").addEventListener("change", (e) => {
+    const t = e.target, i = Number(t.dataset.i), f = t.dataset.sf;
+    if (!f || !scanLines[i]) return;
+    if (f === "include") { scanLines[i].include = t.checked; renderScan(); }
+    else if (f === "price") renderScan();
+    else if (f === "match") { scanLines[i].match = t.value; renderScan(); }
+  });
+  $("#scanReview").addEventListener("click", async (e) => {
+    if (e.target.id === "scanClear") { scanLines = []; $("#scanReview").innerHTML = ""; scanStatus(""); return; }
+    if (e.target.id !== "scanSave") return;
+    if (!db) { toast("Open this page on claude.ai while signed in to save items."); return; }
+    const btn = e.target; btn.disabled = true;
+    const sup = $("#scanSup").value.trim() || scanSupplier;
+    let added = 0, updated = 0, repriced = 0;
+    for (const l of scanLines) {
+      if (!l.include || !l.name.trim()) continue;
+      const it = l.match && state.items.find((x) => x.id === l.match);
+      try {
+        if (it) {
+          const patch = l.qty > 0 ? batchPatch(getBatches(it).concat([{ exp: l.expiry, qty: l.qty }]), it) : {};
+          if (l.price != null) { const c = priceChange(l); if (c && !c.same) repriced++; patch.price = l.price; }
+          if (l.type.trim() && !it.type) patch.type = l.type.trim();
+          if (l.ingredients && l.ingredients.trim()) patch.ingredients = l.ingredients.trim();
+          if (sup && !it.supplier) patch.supplier = sup;
+          if (Object.keys(patch).length) await update(it.id, patch);
+          updated++;
+        } else {
+          await db.collection("items").add(itemFrom({ name: l.name, supplier: sup, type: l.type, onHand: l.qty, min: 2, price: l.price, expiry: l.expiry, ingredients: l.ingredients || "" }));
+          added++;
+        }
+      } catch (err) { writeErr(err); break; }
+      btn.textContent = `Saving… ${added + updated}`;
+    }
+    scanLines = []; $("#scanReview").innerHTML = ""; scanFile.value = ""; setScanImages([]);
+    const parts = [added ? `${added} new item${added === 1 ? "" : "s"} added` : "", updated ? `${updated} item${updated === 1 ? "" : "s"} topped up` : "", repriced ? `${repriced} price${repriced === 1 ? "" : "s"} updated` : ""].filter(Boolean);
+    scanStatus(parts.length ? parts.join(", ") + "." : "");
+    if (parts.length) toast(parts.join(", "));
+  });
+
+  // ---------- backup / restore ----------
+  let dls = null, bkPending = null;
+  const bkBox = $("#bkBox");
+  function bkMsg(html) { bkBox.innerHTML = html; }
+  async function initBackup() {
+    if (window.STOCKROOM_LOCAL) { $("#bkCard").hidden = true; return; }
+    try { dls = window.claude && window.claude.use ? await window.claude.use("downloads") : null; } catch (e) { dls = null; }
+  }
+  const strip = (snap) => { const d = Object.assign({}, snap.data()); return d; };
+  $("#bkDl").addEventListener("click", async () => {
+    if (!db) { bkMsg(`<p class="notice">Stock isn't loaded on this page, so there's nothing to back up yet.</p>`); return; }
+    if (!dls) { bkMsg(`<p class="notice">Downloads aren't available in this view. Open Stock Room in a computer browser, or ask Claude in chat to send you a backup file.</p>`); return; }
+    const btn = $("#bkDl"); btn.disabled = true; bkMsg(`<p class="hint">Preparing backup…</p>`);
+    try {
+      const out = { version: 1, items: {}, sales: {}, meta: {} };
+      state.items.forEach((it) => { const d = Object.assign({}, it); delete d.id; out.items[it.id] = d; });
+      const sales = await db.collection("sales").get();
+      sales.docs.forEach((s) => { out.sales[s.id] = strip(s); });
+      const set = await db.doc("meta/settings").get();
+      if (set.exists) out.meta.settings = strip(set);
+      await dls.save({ filename: `stockroom-backup-${todayKey()}.json`, data: JSON.stringify(out, null, 1) });
+      bkMsg(`<p class="hint">Backup saved: ${state.items.length} items, ${sales.size} sales.</p>`);
+    } catch (e) {
+      bkMsg(e && e.code === "declined" ? "" : `<p class="notice">The backup couldn't be saved here. Try a computer browser, or ask Claude in chat to send you a backup file.</p>`);
+    }
+    btn.disabled = false;
+  });
+  $("#bkFile").addEventListener("change", async (e) => {
+    const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+    let data = null; try { data = JSON.parse(await f.text()); } catch (er) {}
+    if (!data || typeof data.items !== "object") { bkPending = null; bkMsg(`<p class="notice">That file isn't a Stock Room backup.</p>`); return; }
+    bkPending = data;
+    const ni = Object.keys(data.items || {}).length, ns = Object.keys(data.sales || {}).length;
+    bkMsg(`<div class="notice">Replace everything here with this backup (${ni} items, ${ns} sales)? Stock, sales, product types and suppliers on this page will be overwritten for everyone. Download a backup first if you want to keep the current data.</div>
+      <div class="actions"><button class="danger" type="button" id="bkYes">Yes, replace</button><button class="ghost" type="button" id="bkNo">Cancel</button></div>`);
+  });
+  bkBox.addEventListener("click", async (e) => {
+    if (e.target.id === "bkNo") { bkPending = null; bkMsg(""); return; }
+    if (e.target.id !== "bkYes" || !bkPending || !db) return;
+    const data = bkPending; bkPending = null;
+    const ok = (id) => /^[A-Za-z0-9_\-.~:@+]{1,200}$/.test(id);
+    try {
+      const jobs = [];
+      const keepItems = data.items || {}, keepSales = data.sales || {};
+      state.items.forEach((it) => { if (!(it.id in keepItems)) jobs.push(() => db.collection("items").doc(it.id).delete()); });
+      const curSales = await db.collection("sales").get();
+      curSales.docs.forEach((s) => { if (!(s.id in keepSales)) jobs.push(() => db.collection("sales").doc(s.id).delete()); });
+      Object.entries(keepItems).forEach(([id, d]) => { if (ok(id) && d && typeof d === "object") jobs.push(() => db.collection("items").doc(id).set(d)); });
+      Object.entries(keepSales).forEach(([id, d]) => { if (ok(id) && d && typeof d === "object") jobs.push(() => db.collection("sales").doc(id).set(d)); });
+      const st = data.meta && data.meta.settings;
+      if (st && typeof st === "object") jobs.push(() => db.doc("meta/settings").set(st));
+      let done = 0;
+      for (const j of jobs) { await j(); done++; if (done % 5 === 0 || done === jobs.length) bkMsg(`<p class="hint">Restoring… ${done} of ${jobs.length}</p>`); }
+      bkMsg(`<p class="hint">Restored ${Object.keys(keepItems).length} items and ${Object.keys(keepSales).length} sales.</p>`);
+      toast("Backup restored");
+    } catch (er) {
+      writeErr(er);
+      bkMsg(`<p class="notice">The restore stopped part-way. Run it again with the same file to finish.</p>`);
+    }
+  });
+
+  // ---------- boot ----------
+  async function resolveNames() {
+    if (!user || !user.profiles) return;
+    const ids = [...new Set(state.items.map((i) => i.updatedBy).concat(till.sales.map((x) => x.by), hist.sales.map((x) => x.by)).concat([me]).filter((x) => x && !(x in names)))];
+    if (!ids.length) return;
+    try {
+      const ps = await user.profiles(ids);
+      let changed = false;
+      ids.forEach((id) => { const n = (ps && ps[id] && ps[id].name) || "a teammate"; if (names[id] !== n) { names[id] = n; changed = true; } });
+      if (changed) { renderList(); renderSales(); renderHist(); }
+    } catch (e) {}
+  }
+
+  render();
+  (async () => {
+    if (!window.claude || !window.claude.use) { state.failed = "nodb"; render(); return; }
+    db = await window.claude.use("db");
+    initScan();
+    initBackup();
+    if (!db) { state.failed = "nodb"; render(); return; }
+    user = await window.claude.use("user");
+    if (user) {
+      try { me = await user.id(); } catch (e) {}
+      try { const c = await user.can("data.write"); if (c === false) state.canWrite = false; } catch (e) {}
+    }
+    db.collection("items").onSnapshot((snap) => {
+      state.items = snap.docs.map((d) => Object.assign({ id: d.id }, d.data()));
+      state.ready = true;
+      render();
+      resolveNames();
+    }, (err) => { state.failed = err && err.code || "unavailable"; render(); });
+    const since = new Date(); since.setDate(since.getDate() - 1);
+    db.collection("sales").where("at", ">=", since.toISOString()).onSnapshot((snap) => {
+      till.sales = snap.docs.map((d) => Object.assign({ id: d.id }, d.data()));
+      renderSales();
+    }, () => {});
+    if (state.tab === "hist") openHist();
+    db.doc("meta/settings").onSnapshot((snap) => {
+      const d = snap.exists ? snap.data() : null;
+      state.savedTypes = d && Array.isArray(d.types) ? d.types.filter((x) => typeof x === "string" && x.trim()) : [];
+      state.savedSuppliers = d && Array.isArray(d.suppliers) ? d.suppliers.filter((x) => typeof x === "string" && x.trim()) : [];
+      state.quick = d && Array.isArray(d.quick) ? d.quick.filter((x) => typeof x === "string") : [];
+      if (typeof renderQuick === "function" && !$("#qmenu").hidden) renderQuick();
+      renderChips();
+    }, () => {});
+  })();
+})();
+</script>
